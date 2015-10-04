@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="fyp.models.Presentation" table="Presentations">
+		<id name="id" column="id" type="java.lang.Integer">
+			<generator class="native"/>
+		</id>
+		<property name="createTime" type="java.sql.Date" insert="false" update="false" generated="insert" >
+			<column name="create_time" sql-type="DATETIME" not-null="true" />
+		</property>
+		<property name="updateTime" type="java.sql.Date" insert="false" update="false" generated="always" >
+			<column name="update_time" sql-type="DATETIME" not-null="true" />
+		</property>
+		<!-- property name="departmentId" column="department_id" type="java.lang.Byte" not-null="true" / -->
+		<many-to-one name="department" class="fyp.models.Department" column="department_id" cascade="save-update" fetch="select" not-null="true" />
+		<property name="name" column="name" type="java.lang.String" not-null="true" length="64"/>
+		<property name="yearSemester" column="semester" type="java.lang.String" not-null="true" length="5"/>
+	</class>
+</hibernate-mapping>

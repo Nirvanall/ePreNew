@@ -12,16 +12,25 @@
 	min-width: 800px;
 }
 .logo{
-	margin-top: 5px;
 	margin-left: 8px;
 }
-.segment{
+#page-header{
+	margin-top: 8px;
+}
+#page-footer{
+	padding-top: 20px;
+	padding-bottom: 20px;
+	text-align: center;
+}
+#row1 .segment{
 	max-width: 360px;
 	width: 360px;
 }
 table{
 	margin-left: auto;
 	margin-right: auto;
+	border-collapse: separate;
+	border-spacing: 10px;
 }
 td{
 	vertical-align: top;
@@ -34,41 +43,43 @@ td{
 <script type="text/javascript">
 $(document).ready(function(){
 	var login_form = $("#login-form");
-	login_form.form({
-		fields: {
-			user: {
-				identifier: "user",
-				rules: [{
-					type   : "empty",
-					prompt : "Please enter your user ID"
-				}]
-			},
-			password: {
-				identifier : "password",
-				rules: [{
-					type   : "empty",
-					prompt : "Please enter a password"
-				}]
+	if(1 == login_form.length){
+		login_form.form({
+			fields: {
+				user: {
+					identifier: "user",
+					rules: [{
+						type   : "empty",
+						prompt : "Please enter your user ID"
+					}]
+				},
+				password: {
+					identifier : "password",
+					rules: [{
+						type   : "empty",
+						prompt : "Please enter a password"
+					}]
+				}
 			}
-		}
-	});
+		});
+	}
 });
 </script>
 </head>
 
 <body>
-<article class="page">
-	<section>
-		<img src="images/polyu_logo.jpg" class="logo" />
-		<img src="images/eie_logo.jpg" class="logo" />
+<article class="ui container page">
+	<section id="page-header">
+		<a href="http://www.polyu.edu.hk" ><img src="images/polyu_logo.jpg" class="logo" /></a>
+		<a href="http://eie.polyu.edu.hk" ><img src="images/eie_logo.jpg" class="logo" /></a>
 		<img src="images/logo.png" class="logo" />
 	</section>
 	<div class="ui divider"></div>
 
 	<table>
-		<tr>
+		<tr id="row1">
 			<td>
-				<div class="ui blue segment">
+				<div class="ui blue segment" id="login-segment">
 					<h3 class="ui dividing header">Login</h3>
 					<form action="login.action" method="post" class="ui form" id="login-form">
 						<div class="required field">
@@ -92,21 +103,34 @@ $(document).ready(function(){
 					</form>
 				</div>
 			</td>
-			<td width="10"></td>
 			<td>
 				<div class="ui blue segment">
 					<h3 class="ui dividing header">Useful Links</h3>
 					<div class="ui vertical text menu">
 						<a class="item" href="http://www.polyu.edu.hk" >PolyU Main Page</a>
+						<a class="item" href="http://www.polyu.edu.hk/feng/" >FENG Main Page</a>
 						<a class="item" href="http://eie.polyu.edu.hk" >EIE Main Page</a>
 						<a class="item" href="https://www.lib.polyu.edu.hk" >PolyU Library</a>
 						<a class="item" href="https://www38.polyu.edu.hk/eStudent/" >PolyU eStudent</a>
 						<a class="item" href="https://learn.polyu.edu.hk" >PolyU Blackboard</a>
+						<a class="item" href="https://www.outlook.com/connect.polyu.hk" >PolyU Connect</a>
+						<a class="item" href="http://www.polyu.edu.hk/sao/CDP/" >PolyU CDP</a>
+						<a class="item" href="https://www40.polyu.edu.hk/saosport/" >Sports Facilities</a>
 					</div>
 				</div>
 			</td>
 		</tr>
+		<tr>
+			<td colspan="2">
+				<div class="ui blue segment">
+					<h3 class="ui dividing header">Announcements</h3>
+					
+				</div>
+			</td>
+		</tr>
 	</table>
+	
+	<div id="page-footer" class="ui inverted blue segment">Copyright &copy; 2015 The Hong Kong Polytechnic University. All Rights Reserved</div>
 </article>
 </body>
 </html>

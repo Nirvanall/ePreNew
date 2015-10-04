@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="connection.url">jdbc:mysql://localhost:3306/ePre</property>
+		<property name="connection.username">fyp</property>
+		<property name="connection.password">FYP-2014_fyp-2016</property>
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="javax.persistence.validation.mode">none</property>
+		
+		<mapping resource="fyp/models/Department.hbm.xml"/>
+		<mapping resource="fyp/models/User.hbm.xml"/>
+		<mapping resource="fyp/models/Presentation.hbm.xml"/>
+		<mapping resource="fyp/models/Video.hbm.xml"/>
+		<mapping resource="fyp/models/Assessment.hbm.xml"/>
+		<mapping resource="fyp/models/Comment.hbm.xml"/>
+		<mapping resource="fyp/models/Response.hbm.xml"/>
+	</session-factory>
+</hibernate-configuration>

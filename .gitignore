@@ -1,0 +1,4 @@
+~*
+*.tmp
+*.swp
+WebContent/WEB-INF/classes/*
