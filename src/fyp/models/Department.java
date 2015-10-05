@@ -2,8 +2,20 @@ package fyp.models;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
+@Entity
+@Table(name = "Departments")
 public class Department{
-	
+	@Id
+	@GeneratedValue
 	private Byte id;
 	
 	public Byte getId(){
@@ -14,7 +26,8 @@ public class Department{
 		this.id = id;
 	}
 	
-	
+	@Column(name = "create_time", insertable = false, updatable = false)
+	@Generated(value = GenerationTime.INSERT)
 	private Date createTime;
 	
 	public Date getCreateTime(){
@@ -25,7 +38,8 @@ public class Department{
 		this.createTime = createTime;
 	}
 	
-	
+	@Column(name = "update_time", insertable = false, updatable = false)
+	@Generated(value = GenerationTime.ALWAYS)
 	private Date updateTime;
 	
 	public Date getUpdateTime(){
@@ -36,7 +50,7 @@ public class Department{
 		this.updateTime = updateTime;
 	}
 	
-	
+	@Column(length = 8, nullable = false, unique = true)
 	private String abbreviation;
 	
 	public String getAbbreviation(){
@@ -47,7 +61,7 @@ public class Department{
 		this.abbreviation = abbreviation;
 	}
 	
-	
+	@Column(length = 64, nullable = false, unique = true)
 	private String name;
 	
 	public String getName(){

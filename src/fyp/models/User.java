@@ -5,9 +5,23 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
+@Entity
+@Table(name = "Accounts")
 public class User{
-	
+	@Id
+	@GeneratedValue
 	private Integer id;
 	
 	public Integer getId(){
@@ -18,7 +32,8 @@ public class User{
 		this.id = id;
 	}
 	
-	
+	@Column(name = "create_time", insertable = false, updatable = false)
+	@Generated(value = GenerationTime.INSERT)
 	private Date createTime;
 	
 	public Date getCreateTime(){
@@ -29,7 +44,8 @@ public class User{
 		this.createTime = createTime;
 	}
 	
-	
+	@Column(name = "update_time", insertable = false, updatable = false)
+	@Generated(value = GenerationTime.ALWAYS)
 	private Date updateTime;
 	
 	public Date getUpdateTime(){
@@ -40,7 +56,7 @@ public class User{
 		this.updateTime = updateTime;
 	}
 	
-	
+	@Column(name = "user_id", length = 20, nullable = false, unique = true)
 	private String userId;
 	
 	public String getUserId(){
@@ -51,7 +67,7 @@ public class User{
 		this.userId = userId;
 	}
 	
-	
+	@Column(length = 64, nullable = false)
 	private String name;
 	
 	public String getName(){
@@ -62,7 +78,7 @@ public class User{
 		this.name = name;
 	}
 	
-	
+	@Column(length = 64, nullable = false)
 	private String password;
 	
 	public String getPassword(){
@@ -106,7 +122,7 @@ public class User{
 		return result;
 	}
 	
-	
+	/*
 	private Byte departmentId;
 	
 	public Byte getDepartmentId(){
@@ -115,8 +131,20 @@ public class User{
 	public void setDepartmentId(Byte departmentId){
 		this.departmentId = departmentId;
 	}
+	*/
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "department_id", nullable = false)
+	private Department department;
 	
+	public Department getDepartment(){
+		return department;
+	}
 	
+	public void setDepartment(Department department){
+		this.department = department;
+	}
+	
+	@Column
 	private Byte category;
 	
 	public Byte getCategory(){
