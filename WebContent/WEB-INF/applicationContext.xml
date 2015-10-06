@@ -5,13 +5,13 @@
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context 
-		http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/aop
-		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/task   
-		http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+		http://www.springframework.org/schema/task/spring-task.xsd">
 		 
     <context:annotation-config />
     
@@ -22,7 +22,7 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
 		<property name="url" value="jdbc:mysql://localhost/ePre"/>
 		<property name="username" value="fyp"/>
-		<property name="password" value="FYP-2014_fyp-2016"/>
+		<property name="password" value="FYP2014_fyp2016"/>
 	</bean>
 
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
@@ -31,6 +31,7 @@
 			<list>
 				<value>fyp.models.Department</value>
 				<value>fyp.models.User</value>
+				<value>fyp.models.Message</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

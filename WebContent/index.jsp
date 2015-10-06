@@ -1,27 +1,13 @@
-﻿<%@page language="java" import="java.util.*" pageEncoding="UTF-8" %>
-<%@taglib prefix="s" uri="/struts-tags" %>
+﻿<%@ page language="java" import="java.util.*" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <base href="/ePreNew/" />
 <title>Welcome to ePre</title>
 
 <link rel="stylesheet" type="text/css" href="css/semantic.min.css" />
+<link rel="stylesheet" type="text/css" href="css/page.css" />
 <style type="text/css">
-.page{
-	min-width: 800px;
-}
-.logo{
-	margin-left: 8px;
-}
-#page-header{
-	margin-top: 8px;
-}
-#page-footer{
-	padding-top: 20px;
-	padding-bottom: 20px;
-	text-align: center;
-}
 #row1 .segment{
 	max-width: 360px;
 	width: 360px;
@@ -75,13 +61,14 @@ $(document).ready(function(){
 		<img src="images/logo.png" class="logo" />
 	</section>
 	<div class="ui divider"></div>
-
+	
+	<section id="page-content">
 	<table>
 		<tr id="row1">
 			<td>
 				<div class="ui blue segment" id="login-segment">
 					<h3 class="ui dividing header">Login</h3>
-					<form action="login.action" method="post" class="ui form" id="login-form">
+					<form action="login.do" method="post" class="ui form" id="login-form">
 						<div class="required field">
 							<label class="ui left aligned header">User ID</label>
 							<div class="ui left icon input">
@@ -94,6 +81,12 @@ $(document).ready(function(){
 							<div class="ui left icon input">
 								<i class="lock icon"></i>
 								<input type="password" name="password" required="required" maxlength="32" />
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui checkbox">
+								<input type="checkbox" name="remember" />
+								<label>Remember Me</label>
 							</div>
 						</div>
 						<div class="ui error message"></div>
@@ -129,6 +122,7 @@ $(document).ready(function(){
 			</td>
 		</tr>
 	</table>
+	</section>
 	
 	<div id="page-footer" class="ui inverted blue segment">Copyright &copy; 2015 The Hong Kong Polytechnic University. All Rights Reserved</div>
 </article>
