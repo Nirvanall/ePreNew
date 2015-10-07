@@ -49,22 +49,14 @@
     <repositories>
     	<repository>
             <id>maven-central</id>
-            <url>https://central.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>spring-milestone</id>
-            <url>https://repo.spring.io/libs-release</url>
+            <url>https://repo.maven.apache.org/maven2</url>
         </repository>
     </repositories>
 
     <pluginRepositories>
     	<pluginRepository>
             <id>maven-central</id>
-            <url>https://central.maven.org/maven2</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>spring-milestone</id>
-            <url>https://repo.spring.io/libs-release</url>
+            <url>https://repo.maven.apache.org/maven2</url>
         </pluginRepository>
     </pluginRepositories>
 

@@ -1,6 +1,5 @@
 package fyp.models;
 
-import java.sql.Date;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
@@ -8,53 +7,16 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Accounts")
-public class User{
-	@Id
-	@GeneratedValue
-	private Integer id;
-	
-	public Integer getId(){
-		return id;
-	}
-	
-	public void setId(Integer id){
-		this.id = id;
-	}
-	
-	@Column(name = "create_time", insertable = false, updatable = false)
-	@Generated(value = GenerationTime.INSERT)
-	private Date createTime;
-	
-	public Date getCreateTime(){
-		return createTime;
-	}
-	
-	public void setCreateTime(Date createTime){
-		this.createTime = createTime;
-	}
-	
-	@Column(name = "update_time", insertable = false, updatable = false)
-	@Generated(value = GenerationTime.ALWAYS)
-	private Date updateTime;
-	
-	public Date getUpdateTime(){
-		return updateTime;
-	}
-	
-	public void setUpdateTime(Date updateTime){
-		this.updateTime = updateTime;
-	}
+public class User extends IdAndTimeModel implements Comparable<User> {
+	@Transient
+	private static final long serialVersionUID = 1L;
 	
 	@Column(name = "user_id", length = 20, nullable = false, unique = true)
 	private String userId;
@@ -168,6 +130,21 @@ public class User{
 	}
 	
 	public boolean isGuest(){
-		return category == 3;
+		return !isAdmin() && !isStudent() && !isTeacher();
+	}
+	
+	
+	public int compareTo(User user) {
+		int result = department.compareTo(user.department);
+		if (0 != result) return result;
+
+		if (null == category && null != user.category) return 1;
+		if (null != category && null == user.category) return -1;
+		// put undefined user at last
+		
+		result = category.compareTo(user.category);
+		if (0 != result) return result;
+		
+		return userId.compareTo(user.userId);
 	}
 }

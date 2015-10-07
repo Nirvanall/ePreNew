@@ -30,11 +30,10 @@ public class IndexController {
     	Query query = session.createQuery("FROM Message AS m WHERE m.toUser IS NULL");
     	query.setMaxResults(6);
     	@SuppressWarnings("unchecked") List<Message> announcements = (List<Message>)query.list();
-    	if (!announcements.isEmpty()) {
-    		model.addAttribute("announcements", announcements);
-    		if (announcements.size() > 5) {
-    			model.addAttribute("more_announcements", true);
-    		}
+    	model.addAttribute("announcements", announcements);
+    	if (announcements.size() > 5) {
+    		announcements.remove(5);
+    		model.addAttribute("more_announcements", true);
     	}
     	
     	if (null != source && source.equalsIgnoreCase("login")) {

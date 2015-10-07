@@ -1,100 +1,83 @@
 package fyp.models;
 
-import java.sql.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
-public class Presentation{
+@Entity
+@Table(name = "Presentations")
+public class Presentation extends IdAndTimeModel implements Comparable<Presentation> {
+	@Transient
+	private static final long serialVersionUID = 1L;
 	
-	private Integer id;
-	
-	public Integer getId(){
-		return id;
-	}
-	
-	public void setId(Integer id){
-		this.id = id;
-	}
-	
-	
-	private Date createTime;
-	
-	public Date getCreateTime(){
-		return createTime;
-	}
-	
-	public void setCreateTime(Date createTime){
-		this.createTime = createTime;
-	}
-	
-	
-	private Date updateTime;
-	
-	public Date getUpdateTime(){
-		return updateTime;
-	}
-	
-	public void setUpdateTime(Date updateTime){
-		this.updateTime = updateTime;
-	}
-	
-	/*
-	private Byte departmentId;
-	
-	public Byte getDepartmentId(){
-		return departmentId;
-	}
-	public void setDepartmentId(Byte departmentId){
-		this.departmentId = departmentId;
-	}
-	*/
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "department_id", nullable = false)
 	private Department department;
 	
-	public Department getDepartment(){
+	public Department getDepartment() {
 		return department;
 	}
-	public void setDepartment(Department department){
+	public void setDepartment(Department department) {
 		this.department = department;
 	}
 	
-	
+	@Column(length = 64, nullable = false, unique = true)
 	private String name;
 	
-	public String getName(){
+	public String getName() {
 		return name;
 	}
 	
-	public void setName(String name){
+	public void setName(String name) {
 		this.name = name;
 	}
 	
-	
+	@Column(length = 5, nullable = false)
 	private String yearSemester;
 	
-	public String getYearSemester(){
+	public String getYearSemester() {
 		return yearSemester;
 	}
 	
-	public void setYearSemester(String yearSemester){
+	public void setYearSemester(String yearSemester) {
 		this.yearSemester = yearSemester;
 	}
 	
 	
-	public Short getYear(){
+	public Short getYear() {
 		return Short.parseShort(yearSemester.substring(0, 4));
 	}
 	
-	public Byte getSemester(){
+	public Byte getSemester() {
 		return Byte.parseByte(yearSemester.substring(4));
 	}
 	
-	public String getSemesterString(){
+	public String getSemesterString() {
 		char c = yearSemester.charAt(4);
-		if('a' == c){
+		if ('a' == c) {
 			return "All Semesters";
 		}
-		if('b' == c){
+		if ('b' == c) {
 			return "Semester 1 and 2";
 		}
 		return "Semester" + c;
 	}
 	
+	
+	public int compareTo(Presentation presentation) {
+		int result = department.compareTo(presentation.department);
+		if (0 != result) return result;
+		
+		result = getYear().compareTo(presentation.getYear());
+		if (0 != result) return result;
+		
+		result = getSemester().compareTo(presentation.getSemester());
+		if (0 != result) return result;
+		
+		return name.compareTo(presentation.name);
+	}
 }

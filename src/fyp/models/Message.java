@@ -1,57 +1,18 @@
 package fyp.models;
 
-import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Messages")
-public class Message{
-	@Id
-	@GeneratedValue
-	private Integer id;
-	
-	public Integer getId(){
-		return id;
-	}
-	
-	public void setId(Integer id){
-		this.id = id;
-	}
-	
-	@Column(name = "create_time", insertable = false, updatable = false)
-	@Generated(value = GenerationTime.INSERT)
-	private Date createTime;
-	
-	public Date getCreateTime(){
-		return createTime;
-	}
-	
-	public void setCreateTime(Date createTime){
-		this.createTime = createTime;
-	}
-	
-	@Column(name = "create_time", insertable = false, updatable = false)
-	@Generated(value = GenerationTime.ALWAYS)
-	private Date updateTime;
-	
-	public Date getUpdateTime(){
-		return updateTime;
-	}
-	
-	public void setUpdateTime(Date updateTime){
-		this.updateTime = updateTime;
-	}
+public class Message extends IdAndTimeModel implements Comparable<Message> {
+	@Transient
+	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "from_user_id", nullable = false)
@@ -88,4 +49,8 @@ public class Message{
 		this.content = content;
 	}
 	
+	
+	public int compareTo(Message message) {
+		return -(createTime.compareTo(message.createTime));
+	}
 }

@@ -1,5 +1,7 @@
 package fyp.controllers;
 
+import javax.servlet.http.HttpSession;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -24,16 +26,20 @@ public class LoginController {
 	public String loginAction(
 			@RequestParam(value="user", required=true) String userId,
     		@RequestParam(value="password", required=true) String password,
-    		Model model) {
+    		HttpSession httpSession,
+    		Model model
+    ) {
 		Session session = sessionFactory.openSession();
     	Query query = session.createQuery("FROM User AS u WHERE u.userId=:userId AND u.password=sha2(:password, 256)");
     	query.setString("userId", userId).setString("password", password);
     	User user = (User)query.uniqueResult();
-    	if (null == user) return new IndexController().indexAction("login", model);
-        if (user.isAdmin()) return "admin";
-        // if (user.isTeacher()) return new TeacherController().indexAction("login", model);
-        // if (user.isStudent()) return new StudentController().indexAction("login", model);
-        // return new GuestController().indexAction("login", model);
-        return "student";
+    	if (null == user) return "redirect:index.do?source=login";
+
+    	httpSession.setAttribute("user", user);
+    	
+        if (user.isAdmin()) return "redirect:admin.do";
+        if (user.isTeacher()) return "redirect:teacher.do";
+        if (user.isStudent()) return "redirect:student.do";
+        return "redirect:guest.do";
 	}
 }

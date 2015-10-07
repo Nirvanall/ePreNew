@@ -1,40 +1,18 @@
 package fyp.models;
 
-import java.sql.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
-public class Video{
-	
-	private Integer id;
-	
-	public Integer getId(){
-		return id;
-	}
-	
-	public void setId(Integer id){
-		this.id = id;
-	}
-	
-	
-	private Date createTime;
-	
-	public Date getCreateTime(){
-		return createTime;
-	}
-	
-	public void setCreateTime(Date createTime){
-		this.createTime = createTime;
-	}
-	
-	
-	private Date updateTime;
-	
-	public Date getUpdateTime(){
-		return updateTime;
-	}
-	
-	public void setUpdateTime(Date updateTime){
-		this.updateTime = updateTime;
-	}
+@Entity
+@Table(name = "Departments")
+public class Video extends IdAndTimeModel implements Comparable<Video> {
+	@Transient
+	private static final long serialVersionUID = 1L;
 	
 	/*
 	private Integer presentationId;
@@ -47,6 +25,8 @@ public class Video{
 		this.presentationId = presentationId;
 	}
 	*/
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "presentation_id", nullable = false)
 	private Presentation presentation;
 	
 	public Presentation getPresentation(){
@@ -69,6 +49,8 @@ public class Video{
 		this.userId = userId;
 	}
 	*/
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User owner;
 	
 	public User getOwner(){
@@ -79,7 +61,7 @@ public class Video{
 		this.owner = owner;
 	}
 	
-	
+	@Column(length = 64, nullable = false, unique = true)
 	private String name;
 	
 	public String getName(){
@@ -90,7 +72,7 @@ public class Video{
 		this.name = name;
 	}
 	
-	
+	@Column(length = 256, nullable = false, unique = true)
 	private String info;
 	
 	public String getInfo(){
@@ -102,5 +84,13 @@ public class Video{
 	}
 	
 	
-	
+	public int compareTo(Video video) {
+		int result = presentation.compareTo(video.presentation);
+		if (0 != result) return result;
+		
+		result = owner.compareTo(video.owner);
+		if (0 != result) return result;
+		
+		return -(createTime.compareTo(video.createTime));
+	}
 }

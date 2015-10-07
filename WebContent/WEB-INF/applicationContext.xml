@@ -32,6 +32,8 @@
 				<value>fyp.models.Department</value>
 				<value>fyp.models.User</value>
 				<value>fyp.models.Message</value>
+				<value>fyp.models.Presentation</value>
+				<value>fyp.models.Video</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

@@ -1,52 +1,21 @@
 package fyp.models;
 
-import java.sql.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
-public class Comment{
+@Entity
+@Table(name = "Departments")
+public class Comment extends IdAndTimeModel implements Comparable<Comment> {
+	@Transient
+	private static final long serialVersionUID = 1L;
 	
-	private Integer id;
-	
-	public Integer getId(){
-		return id;
-	}
-	
-	public void setId(Integer id){
-		this.id = id;
-	}
-	
-	
-	private Date createTime;
-	
-	public Date getCreateTime(){
-		return createTime;
-	}
-	
-	public void setCreateTime(Date createTime){
-		this.createTime = createTime;
-	}
-	
-	
-	private Date updateTime;
-	
-	public Date getUpdateTime(){
-		return updateTime;
-	}
-	
-	public void setUpdateTime(Date updateTime){
-		this.updateTime = updateTime;
-	}
-	
-	
-	/*
-	private Integer userId;
-	
-	public Integer getUserId(){
-		return userId;
-	}
-	public void setUserId(Integer userId){
-		this.userId = userId;
-	}
-	*/
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User commenter;
 	
 	public User getCommenter(){
@@ -57,18 +26,8 @@ public class Comment{
 		this.commenter = commenter;
 	}
 	
-	
-	/*
-	private Integer videoId;
-	
-	public Integer getVideoId(){
-		return videoId;
-	}
-	
-	public void setVideoId(Integer videoId){
-		this.videoId = videoId;
-	}
-	*/
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "video_id", nullable = false)
 	private Video video;
 	
 	public Video getVideo(){
@@ -79,7 +38,7 @@ public class Comment{
 		this.video = video;
 	}
 	
-	
+	@Column(nullable = false)
 	private Float playtime;
 	
 	public Float getPlaytime(){
@@ -90,7 +49,7 @@ public class Comment{
 		this.playtime = playtime;
 	}
 	
-	
+	@Column(length = 4096, nullable = false)
 	private String content;
 	
 	public String getContent(){
@@ -101,4 +60,14 @@ public class Comment{
 		this.content = content;
 	}
 	
+	
+	public int compareTo(Comment comment) {
+		int result = video.compareTo(comment.video);
+		if (0 != result) return result;
+		
+		result = playtime.compareTo(comment.playtime);
+		if (0 != result) return result;
+		
+		return -(createTime.compareTo(comment.createTime));
+	}
 }

@@ -1,63 +1,44 @@
 package fyp.models;
 
-import java.sql.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
-public class Response{
+@Entity
+@Table(name = "Reponses")
+public class Response extends IdAndTimeModel {
+	@Transient
+	private static final long serialVersionUID = 1L;
 	
-	private Integer id;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "department_id", nullable = false)
+	private User user;
 	
-	public Integer getId(){
-		return id;
+	public User getUser() {
+		return user;
 	}
 	
-	public void setId(Integer id){
-		this.id = id;
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "comment_id", nullable = false)
+	private Comment comment;
 	
-	private Date createTime;
-	
-	public Date getCreateTime(){
-		return createTime;
+	public Comment getComment() {
+		return comment;
 	}
 	
-	public void setCreateTime(Date createTime){
-		this.createTime = createTime;
+	public void setComment(Comment comment){
+		this.comment = comment;
 	}
 	
-	
-	private Date updateTime;
-	
-	public Date getUpdateTime(){
-		return updateTime;
-	}
-	
-	public void setUpdateTime(Date updateTime){
-		this.updateTime = updateTime;
-	}
-	
-	
-	private Integer userId;
-	
-	public Integer getUserId(){
-		return userId;
-	}
-	public void setUserId(Integer userId){
-		this.userId = userId;
-	}
-	
-	
-	private Integer commentId;
-	
-	public Integer getCommentId(){
-		return commentId;
-	}
-	
-	public void setCommentId(Integer commentId){
-		this.commentId = commentId;
-	}
-	
-	
+	@Column(length = 4096, nullable = false)
 	private String content;
 	
 	public String getContent(){
