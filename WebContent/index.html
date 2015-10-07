@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<meta charset="UTF-8" />
 <base th:replace="template :: base" />
 <title>Welcome to ePre</title>
 
@@ -32,7 +33,7 @@ $(document).ready(function(){
 		login_form.form({
 			fields: {
 				user: {
-					identifier: "user",
+					identifier : "user",
 					rules: [{
 						type   : "empty",
 						prompt : "Please enter your user ID"

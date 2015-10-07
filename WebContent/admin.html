@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<base th:replace="template :: base" />
+<title>Welcome to ePre</title>
+
+<link rel="stylesheet" type="text/css" href="css/semantic.min.css" />
+<link rel="stylesheet" type="text/css" href="css/page.css" />
+<style type="text/css">
+td .segment{
+	max-width: 360px;
+	width: 360px;
+}
+table{
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: separate;
+	border-spacing: 10px;
+}
+td{
+	vertical-align: top;
+}
+</style>
+
+<script type="text/javascript" src="javascript/jquery.js"></script>
+<script type="text/javascript" src="javascript/jquery.form.js"></script>
+<script type="text/javascript" src="javascript/semantic.js"></script>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body>
+<article class="ui container page">
+	<section th:replace="template :: header"></section>
+	<div class="ui divider"></div>
+	
+	<section id="page-content">
+	<h2 class="ui header">Administrator Page</h2>
+	<table>
+		<tr>
+			<td>
+				<div class="ui blue segment">
+					<h3 class="ui dividing header">Announcements</h3>
+					<div class="ui vertical text menu">
+						<a class="item" href="announcement/add.html" >Add an Announcement</a>
+						<a class="item" href="announcement/list.do" >Announcement List</a>
+					</div>
+				</div>
+			</td>
+			<td>
+				<div class="ui blue segment">
+					<h3 class="ui dividing header">Accounts</h3>
+					<div class="ui vertical text menu">
+						<a class="item" href="account/add.html" >Add a user account</a>
+						<a class="item" href="account/addBatch.html" >Add a batch of users</a>
+						<a class="item" href="account/list.do" >User Account List</a>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div class="ui blue segment">
+					<h3 class="ui dividing header">Presentations</h3>
+					<div class="ui vertical text menu">
+						<a class="item" href="presentation/add.html" >Add a Presentation</a>
+						<a class="item" href="presentation/list.do" >Presentation List</a>
+					</div>
+				</div>
+			</td>
+			<td>
+				<div class="ui blue segment">
+					<h3 class="ui dividing header">Videos</h3>
+					<div class="ui vertical text menu">
+						<a class="item" href="video/add.html" >Add Information of a New Video</a>
+						<a class="item" href="video/addBatch.html" >Add Information of New Videos</a>
+						<a class="item" href="video/upload.do" >Upload a Video File</a>
+						<a class="item" href="video/list.do" >Video List</a>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+	</section>
+	
+	<div th:replace="template :: footer"></div>
+</article>
+</body>
+</html>
