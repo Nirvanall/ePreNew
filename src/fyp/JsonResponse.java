@@ -7,7 +7,8 @@ public class JsonResponse {
 	public static final int CODE_SUCC = 0, CODE_FAIL = 100,
 			CODE_FAIL_LOGIN = 200, CODE_FAIL_PERMISSION = 201,
 			CODE_FAIL_PASSWORD = 202,
-			CODE_FAIL_LACK_PARAM = 300, CODE_FAIL_INVALID_PARAM = 301;
+			CODE_FAIL_LACK_PARAM = 300, CODE_FAIL_INVALID_PARAM = 301,
+			CODE_FAIL_NOT_FOUND = 400, CODE_FAIL_NOT_OWN = 401;
 	
 	public long time;
 	
@@ -15,7 +16,9 @@ public class JsonResponse {
 	public static final String DESC_SUCC = "Success", DESC_FAIL = "Failure",
 			DESC_FAIL_LOGIN = "Not Logged In", DESC_FAIL_PERMISSION = "No Permission",
 			DESC_FAIL_PASSWORD = "Incorrect Password",
-			DESC_FAIL_LACK_PARAM = "Lack of Parameter", DESC_FAIL_INVALID_PARAM = "Invalid Parameter";
+			DESC_FAIL_LACK_PARAM = "Lack of Parameter", DESC_FAIL_INVALID_PARAM = "Invalid Parameter",
+			DESC_FAIL_NOT_FOUND = "The object of the requested id does not exist",
+			DESC_FAIL_NOT_OWN = "The object of the request id does not belongs to you";
 	
 	public Object data;
 	
@@ -71,6 +74,28 @@ public class JsonResponse {
 		result.code = CODE_FAIL_INVALID_PARAM;
 		result.desc = (null == desc || desc.length() == 0) ? DESC_FAIL_INVALID_PARAM : desc;
 		result.data = parameters;
+		return result;
+	}
+	
+	public static JsonResponse getFailNotFoundInstance(
+			String desc,
+			@SuppressWarnings("rawtypes") Class model
+	) {
+		JsonResponse result = new JsonResponse();
+		result.code = CODE_FAIL_NOT_FOUND;
+		result.desc = (null == desc || desc.length() == 0) ? DESC_FAIL_NOT_FOUND : desc;
+		result.data = model.getName();
+		return result;
+	}
+	
+	public static JsonResponse getFailNotOwnInstance(
+			String desc,
+			@SuppressWarnings("rawtypes") Class model
+	) {
+		JsonResponse result = new JsonResponse();
+		result.code = CODE_FAIL_NOT_OWN;
+		result.desc = (null == desc || desc.length() == 0) ? DESC_FAIL_NOT_OWN : desc;
+		result.data = model.getName();
 		return result;
 	}
 	
