@@ -17,35 +17,38 @@ public class Message extends IdStatusTimeModel implements Comparable<Message> {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "from_user_id", nullable = false)
 	private User fromUser;
-	
-	public User getFromUser(){
+	public User getFromUser() {
 		return fromUser;
 	}
-	
-	public void setFromUser(User fromUser){
+	public void setFromUser(User fromUser) {
 		this.fromUser = fromUser;
 	}
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "to_user_id")
 	private User toUser;
-	
-	public User getToUser(){
+	public User getToUser() {
 		return toUser;
 	}
-	
-	public void setToUser(User toUser){
+	public void setToUser(User toUser) {
 		this.toUser = toUser;
+	}
+	
+	@Column(length = 64, nullable = false)
+	private String title;
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	@Column(length = 4096, nullable = false)
 	private String content;
-	
-	public String getContent(){
+	public String getContent() {
 		return content;
 	}
-	
-	public void setContent(String content){
+	public void setContent(String content) {
 		this.content = content;
 	}
 	

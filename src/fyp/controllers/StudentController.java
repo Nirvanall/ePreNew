@@ -42,6 +42,7 @@ public class StudentController {
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery("FROM Video AS v WHERE v.user=:user ORDER BY v.presentation");
 		query.setParameter("user", user).setFirstResult(offset).setMaxResults(number);
+		query.list();
 		
 		return "student";
 	}
