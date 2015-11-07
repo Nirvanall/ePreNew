@@ -9,7 +9,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Departments")
-public class Department extends TimeModel implements Comparable<Department> {
+public class Department extends StatusTimeModel implements Comparable<Department> {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	

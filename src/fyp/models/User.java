@@ -14,7 +14,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Accounts")
-public class User extends IdAndTimeModel implements Comparable<User> {
+public class User extends IdStatusTimeModel implements Comparable<User> {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	

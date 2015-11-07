@@ -6,7 +6,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-public class Assessment extends IdAndTimeModel {
+public class Assessment extends IdStatusTimeModel {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	

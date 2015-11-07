@@ -10,7 +10,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Reponses")
-public class Response extends IdAndTimeModel {
+public class Response extends IdStatusTimeModel {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	

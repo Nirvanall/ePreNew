@@ -6,7 +6,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 @MappedSuperclass
-public abstract class IdAndTimeModel extends TimeModel {
+public abstract class IdStatusTimeModel extends StatusTimeModel {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	

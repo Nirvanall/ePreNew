@@ -10,7 +10,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Presentations")
-public class Presentation extends IdAndTimeModel implements Comparable<Presentation> {
+public class Presentation extends IdStatusTimeModel implements Comparable<Presentation> {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	
