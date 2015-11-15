@@ -36,7 +36,7 @@ public class Presentation extends IdStatusTimeModel implements Comparable<Presen
 		this.name = name;
 	}
 	
-	@Column(length = 5, nullable = false)
+	@Column(name = "semester", length = 5, nullable = false)
 	private String yearSemester;
 	
 	public String getYearSemester() {

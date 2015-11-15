@@ -1,5 +1,7 @@
 package fyp.controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.hibernate.Query;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import fyp.models.User;
+import fyp.models.Video;
 
 @Controller
 public class StudentController {
@@ -24,8 +27,8 @@ public class StudentController {
 	
 	@RequestMapping(value = "/student.do", method = RequestMethod.GET)
 	public String indexAction(
-			@RequestParam(value = "page") Integer page,
-			@RequestParam(value = "number") Integer number,
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "number", required = false) Integer number,
 			HttpSession httpSession,
 			Model model
 	) {
@@ -40,10 +43,13 @@ public class StudentController {
 		
 		// TODO: Retrieve Department->Presentation->Video
 		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("FROM Video AS v WHERE v.user=:user ORDER BY v.presentation");
-		query.setParameter("user", user).setFirstResult(offset).setMaxResults(number);
-		query.list();
+		Query query = session.createQuery("FROM Video AS v WHERE v.owner.id=:user_id ORDER BY v.presentation");
+		query.setParameter("user_id", user.getId()).setFirstResult(offset).setMaxResults(number);
 		
+		@SuppressWarnings("unchecked")
+		List<Video> videos = (List<Video>)query.list();
+		
+		model.addAttribute("videos", videos);
 		return "student";
 	}
 }

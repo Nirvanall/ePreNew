@@ -1,11 +1,15 @@
 package fyp.models;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
+@Entity
+@Table(name = "Assessments")
 public class Assessment extends IdStatusTimeModel {
 	@Transient
 	private static final long serialVersionUID = 1L;

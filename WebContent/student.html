@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <base th:replace="template :: base" />
 <title>Welcome to ePre</title>
 
@@ -19,12 +19,37 @@
 
 <body>
 <article class="ui container page">
-	<section th:replace="template :: header">
-	</section>
+	<section th:replace="template :: header"></section>
 	<div class="ui divider"></div>
 
 	<section id="page-content">
-	
+		<table class="ui table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Department</th>
+					<th>Presentation</th>
+					<th>Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="video : ${videos}">
+					<td><a th:text="${ video.getId() }"></a></td>
+					<td><a th:text="${ video.getPresentation().getDepartment().getAbbreviation() }"></a></td>
+					<td><a th:text="${ video.getPresentation().getName() }"></a></td>
+					<td><a th:text="${ video.getName() }"></a></td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colSpan="4"><div class="ui center floated pagination menu">
+						<a class="icon item"><i class="left chevron icon"></i></a>
+						<a class="item">1</a>
+						<a class="icon item"><i class="right chevron icon"></i></a>
+					</div></td>
+				</tr>
+			</tfoot>
+		</table>
 	</section>
 	
 	<div th:replace="template :: footer"></div>
