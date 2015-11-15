@@ -69,7 +69,7 @@ public class Video extends IdStatusTimeModel implements Comparable<Video> {
 		this.owner = owner;
 	}
 	
-	@Column(length = 64, nullable = false, unique = true)
+	@Column(length = 64, nullable = false)
 	private String name;
 	
 	public String getName(){
@@ -80,7 +80,7 @@ public class Video extends IdStatusTimeModel implements Comparable<Video> {
 		this.name = name;
 	}
 	
-	@Column(length = 256, nullable = false, unique = true)
+	@Column(length = 256, nullable = false)
 	private String info;
 	
 	public String getInfo(){

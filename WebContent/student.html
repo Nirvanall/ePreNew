@@ -17,8 +17,7 @@
 
 <body>
 <article class="ui container page">
-	<section th:replace="template :: header">
-	</section>
+	<section th:replace="template :: header"></section>
 	<div class="ui divider"></div>
 
 	<section id="page_content">
@@ -59,9 +58,11 @@
 			</tbody>
 			<tfoot th:unless="${#lists.isEmpty(videos)}">
 				<tr>
-					<td colspan="4">
-						
-					</td>
+					<td colSpan="4"><div class="ui center floated pagination menu">
+						<a class="icon item"><i class="left chevron icon"></i></a>
+						<a class="item">1</a>
+						<a class="icon item"><i class="right chevron icon"></i></a>
+					</div></td>
 				</tr>
 			</tfoot>
 		</table>
