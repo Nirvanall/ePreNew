@@ -2,42 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <base href="/ePreNew/" th:fragment="base" />
-<title>Welcome to ePre</title>
 
-<link rel="stylesheet" type="text/css" href="css/semantic.min.css" />
-<link rel="stylesheet" type="text/css" href="css/page.css" />
-<style type="text/css">
-#row1 .segment{
-	max-width: 360px;
-	width: 360px;
-}
-table{
-	margin-left: auto;
-	margin-right: auto;
-	border-collapse: separate;
-	border-spacing: 10px;
-}
-td{
-	vertical-align: top;
-}
-</style>
-
-<script type="text/javascript" src="javascript/jquery.js"></script>
-<script type="text/javascript" src="javascript/jquery.form.js"></script>
-<script type="text/javascript" src="javascript/semantic.js"></script>
 </head>
 
 <body>
 <article class="ui container page">
-	<section id="page-header" style="vertical-align: bottom;" th:fragment="header">
-		<a href="http://www.polyu.edu.hk" ><img src="images/polyu_logo.jpg" class="logo" /></a>
-		<a href="http://eie.polyu.edu.hk" ><img src="images/eie_logo.jpg" class="logo" /></a>
-		<img src="images/logo.png" class="logo" />
+	<section id="page_header" class="ui grid" th:fragment="header">
+		<div id="page_header_logos" class="thirteen wide column">
+			<a href="http://www.polyu.edu.hk" ><img src="images/polyu_logo.jpg" class="logo" /></a>
+			<a href="http://eie.polyu.edu.hk" ><img src="images/eie_logo.jpg" class="logo" /></a>
+			<img src="images/logo.png" class="logo" />
+		</div>
 		
+		<div id="my_user_info" class="three wide column" th:if="${ null != user_id }">
+			<span th:text="${ user_id }"></span><br/>
+			<span th:text="${ user_name }"></span><br/>
+			<a href="password.do">Change Password</a><br/>
+			<a href="logout.do">Logout</a>
+		</div>
 	</section>
 	<div class="ui divider"></div>
 	
-	<div id="page-footer" class="ui inverted blue segment" th:fragment="footer">Copyright &copy; 2015 The Hong Kong Polytechnic University. All Rights Reserved</div>
+	<div id="page_footer" class="ui inverted blue segment" th:fragment="footer">Copyright &copy; 2015 The Hong Kong Polytechnic University. All Rights Reserved</div>
 </article>
 </body>
 </html>

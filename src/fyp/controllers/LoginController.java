@@ -33,7 +33,7 @@ public class LoginController {
     		Model model
     ) {
 		Session session = sessionFactory.openSession();
-    	Query query = session.createQuery("FROM User AS u WHERE u.userId=:userId AND u.password=sha2(:password, 256)");
+    	Query query = session.createQuery("FROM User WHERE userId=:userId AND password=sha2(:password, 256)");
     	query.setString("userId", userId).setString("password", password);
     	User user = (User)query.uniqueResult();
     	if (null == user) return "redirect:index.do?source=login";
@@ -72,7 +72,7 @@ public class LoginController {
 		if (null == user) return JsonResponse.getFailLoginInstance(null);
 		
 		Session session = sessionFactory.openSession();
-    	Query query = session.createQuery("FROM User AS u WHERE u.id=:id AND u.password=sha2(:password, 256)");
+    	Query query = session.createQuery("FROM User WHERE id=:id AND password=sha2(:password, 256)");
     	query.setInteger("id", user.getId()).setString("password", oldPassword);
     	user = (User)query.uniqueResult();
     	if (null == user) return JsonResponse.getFailPasswordInstance(null);

@@ -8,8 +8,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
 @Table(name = "Reponses")
+@DynamicUpdate
 public class Response extends IdStatusTimeModel {
 	@Transient
 	private static final long serialVersionUID = 1L;

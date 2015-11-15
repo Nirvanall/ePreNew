@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<base th:replace="template :: base" />
+<title th:text="${ video.getName() }"></title>
+
+<link rel="stylesheet" type="text/css" href="css/semantic.min.css" />
+<link rel="stylesheet" type="text/css" href="css/page.css" />
+<link rel="stylesheet" type="text/css" href="css/video.css" />
+
+<script type="text/javascript" src="javascript/jquery.js"></script>
+<script type="text/javascript" src="javascript/jquery.form.js"></script>
+<script type="text/javascript" src="javascript/semantic.js"></script>
+<script type="text/javascript" src="javascript/password.js"></script>
+</head>
+
+<body>
+<article class="ui container page">
+	<section th:replace="template :: header"></section>
+	<div class="ui divider"></div>
+	
+	<section id="page-content">
+	<table>
+		<tr>
+			<td colspan="2">
+				<video width="" height="">
+					<source src=".mp4"/>
+					<source src=".webm"/>
+				</video>
+			</td>
+			<td>
+				<div class="ui blue segment">
+					<h3 class="ui header">Comments</h3>
+					<ul id="comment_list">
+						<li th:each="comment : ${video.getComments()}">
+							<p class="comment_header">
+								<span class="comment_playtime" th:text="${ comment.playtimeInfo() }"></span>
+								<span class="commenter" th:text="${ comment.getCommenter().getName() }"></span>
+							</p>
+							<p class="comment_content" th:text="${ comment.getContent() }"></p>
+							<p class="comment_operation" th:if="${ comment.getCommenter().getUserId() == user_id }"
+									th:attr="data-id=${ comment.getId() }">
+								<a href="javascript:void(0);" onclick="editComment(event);">Edit</a>
+								<a href="javascript:void(0);" onclick="deleteComment(event);">Delete</a>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td th:if="${ null != assessment && assessment.canComment() }">
+				<textarea id="comment"></textarea>
+			</td>
+			<td th:if="${ null != assessment && assessment.canComment() }">
+				<button class="ui blue button" id="comment_button">Submit</button>
+			</td>
+			<td>
+				<form class="ui form" th:if="${ null != assessment && assessment.canGrade() }">
+					<div class="field">
+						<label>Grade</label>
+						<input type="number" min="0" max="100" name="grade" th:value="${ assessment.gradeValue() }"/>
+					</div>
+				</form>
+				Average Grade: <span th:text="${ video.averageGrade() }"></span>
+			</td>
+		</tr>
+	</table>
+	</section>
+	
+	<div th:replace="template :: footer"></div>
+</article>
+</body>
+</html>

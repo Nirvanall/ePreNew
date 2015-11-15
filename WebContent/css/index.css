@@ -1,0 +1,29 @@
+#row1 .segment{
+	max-width: 360px;
+	width: 360px;
+}
+table{
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: separate;
+	border-spacing: 10px;
+}
+td{
+	vertical-align: top;
+}
+.announcement_header,
+.announcement_header:first-child,
+.announcement_header:last-child{
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	cursor: pointer;
+}
+.announcement_time{
+	color: #2185d0;
+	font-size: 0.9em;
+	text-align: right;
+	margin: 0;
+}
+.announcement_content{
+	margin: 0;
+}

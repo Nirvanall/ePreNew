@@ -1,0 +1,13 @@
+td .segment{
+	max-width: 360px;
+	width: 360px;
+}
+table{
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: separate;
+	border-spacing: 10px;
+}
+td{
+	vertical-align: top;
+}

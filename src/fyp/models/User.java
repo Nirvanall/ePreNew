@@ -12,8 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
 @Table(name = "Accounts")
+@DynamicUpdate
 public class User extends IdStatusTimeModel implements Comparable<User> {
 	@Transient
 	private static final long serialVersionUID = 1L;

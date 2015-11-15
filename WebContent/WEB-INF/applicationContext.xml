@@ -34,6 +34,9 @@
 				<value>fyp.models.Message</value>
 				<value>fyp.models.Presentation</value>
 				<value>fyp.models.Video</value>
+				<value>fyp.models.Assessment</value>
+				<value>fyp.models.Comment</value>
+				<value>fyp.models.Response</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

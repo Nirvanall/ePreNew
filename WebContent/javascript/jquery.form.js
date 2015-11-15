@@ -114,7 +114,7 @@ $.fn.ajaxSubmit = function(options) {
     url = (typeof action === 'string') ? $.trim(action) : '';
     url = url || window.location.href || '';
     if (url) {
-        // clean url (don't include hash vaue)
+        // clean url (don't include hash value)
         url = (url.match(/^([^#]+)/)||[])[1];
     }
 
@@ -666,7 +666,7 @@ $.fn.ajaxSubmit = function(options) {
                         return;
                     }
                     // let this fall through because server response could be an empty document
-                    //log('Could not access iframe DOM after mutiple tries.');
+                    //log('Could not access iframe DOM after multiple tries.');
                     //throw 'DOMException: not available';
                 }
 

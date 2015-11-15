@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <base th:replace="template :: base" />
-<title>Welcome to ePre</title>
+<title>ePre Student Page</title>
 
 <link rel="stylesheet" type="text/css" href="css/semantic.min.css" />
 <link rel="stylesheet" type="text/css" href="css/page.css" />
-<style type="text/css">
-</style>
 
 <script type="text/javascript" src="javascript/jquery.js"></script>
 <script type="text/javascript" src="javascript/jquery.form.js"></script>
@@ -23,8 +21,50 @@
 	</section>
 	<div class="ui divider"></div>
 
-	<section id="page-content">
-	
+	<section id="page_content">
+		<h2 class="ui header">Your Videos</h2>
+		<table class="ui unstackable table">
+			<thead>
+				<tr>
+					<th>Semester
+						<i class="ui search icon"></i>
+						<div></div>
+					</th>
+					<th>Department
+						<i class="ui search icon"></i>
+					</th>
+					<th>Presentation
+						<i class="ui search icon"></i>
+					</th>
+					<th>Name
+						<i class="ui search icon"></i>
+					</th>
+					<th>Operations</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="video : ${videos}">
+					<td th:text="${ video.getPresentation().infoSemesterFull() }"></td>
+					<td th:text="${ video.getPresentation().getDepartment().getAbbreviation() }"></td>
+					<td th:text="${ video.getPresentation().getName() }"></td>
+					<td th:text="${ video.getName() }"></td>
+					<td th:attr="data-id=${ video.getId() }">
+						<i class="ui edit icon" data-content="Edit" onclick="editVideo(event);"></i>
+						<i class="ui trash icon" data-content="Delete" onclick="deleteVideo(event);"></i>
+					</td>
+				</tr>
+				<tr th:if="${#lists.isEmpty(videos)}">
+					<td>You have no videos</td>
+				</tr>
+			</tbody>
+			<tfoot th:unless="${#lists.isEmpty(videos)}">
+				<tr>
+					<td colspan="4">
+						
+					</td>
+				</tr>
+			</tfoot>
+		</table>
 	</section>
 	
 	<div th:replace="template :: footer"></div>

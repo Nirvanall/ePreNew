@@ -1,15 +1,23 @@
 package fyp.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
-@Table(name = "Departments")
+@Table(name = "Videos")
+@DynamicUpdate
 public class Video extends IdStatusTimeModel implements Comparable<Video> {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -81,6 +89,18 @@ public class Video extends IdStatusTimeModel implements Comparable<Video> {
 	
 	public void setInfo(String info){
 		this.info = info;
+	}
+	
+	@OneToMany(mappedBy = "video", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OrderBy("playtime")
+	private List<Comment> comments;
+	
+	public List<Comment> getComments() {
+		return comments;
+	}
+	
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 	
 	

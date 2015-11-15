@@ -8,8 +8,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
 @Table(name = "Presentations")
+@DynamicUpdate
 public class Presentation extends IdStatusTimeModel implements Comparable<Presentation> {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -36,7 +39,7 @@ public class Presentation extends IdStatusTimeModel implements Comparable<Presen
 		this.name = name;
 	}
 	
-	@Column(length = 5, nullable = false)
+	@Column(name = "semester", length = 5, nullable = false)
 	private String yearSemester;
 	
 	public String getYearSemester() {
@@ -51,12 +54,19 @@ public class Presentation extends IdStatusTimeModel implements Comparable<Presen
 	public Short getYear() {
 		return Short.parseShort(yearSemester.substring(0, 4));
 	}
+
+	public String getAcademicYear() {
+		StringBuilder builder = new StringBuilder(yearSemester.substring(0, 4));
+		builder.append('~');
+		builder.append(getYear() + 1);
+		return builder.toString();
+	}
 	
 	public Byte getSemester() {
 		return Byte.parseByte(yearSemester.substring(4));
 	}
 	
-	public String getSemesterString() {
+	public String infoSemester() {
 		char c = yearSemester.charAt(4);
 		if ('a' == c) {
 			return "All Semesters";
@@ -65,6 +75,10 @@ public class Presentation extends IdStatusTimeModel implements Comparable<Presen
 			return "Semester 1 and 2";
 		}
 		return "Semester" + c;
+	}
+	
+	public String infoSemesterFull() {
+		return getAcademicYear() + ' ' + infoSemester();
 	}
 	
 	

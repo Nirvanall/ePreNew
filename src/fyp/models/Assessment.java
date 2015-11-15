@@ -1,11 +1,18 @@
 package fyp.models;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
+@Entity
+@Table(name = "Assessments")
+@DynamicUpdate
 public class Assessment extends IdStatusTimeModel {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -62,6 +69,10 @@ public class Assessment extends IdStatusTimeModel {
 	
 	public void setGrade(Byte grade) {
 		this.grade = grade;
+	}
+	
+	public String gradeValue() {
+		return null != grade ? grade.toString() : "";
 	}
 	
 	@Column(name = "grade_weight")

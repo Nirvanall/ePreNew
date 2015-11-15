@@ -1,15 +1,23 @@
 package fyp.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
-@Table(name = "Departments")
+@Table(name = "Comments")
+@DynamicUpdate
 public class Comment extends IdStatusTimeModel implements Comparable<Comment> {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -49,6 +57,17 @@ public class Comment extends IdStatusTimeModel implements Comparable<Comment> {
 		this.playtime = playtime;
 	}
 	
+	public String playtimeInfo() {
+		int time = playtime.intValue(), min = time / 60, sec = time % 60;
+		StringBuilder builder = new StringBuilder();
+		if (min < 10) builder.append('0');
+		builder.append(min);
+		builder.append(':');
+		if (sec < 10) builder.append('0');
+		builder.append(sec);
+		return builder.toString();
+	}
+	
 	@Column(length = 4096, nullable = false)
 	private String content;
 	
@@ -58,6 +77,18 @@ public class Comment extends IdStatusTimeModel implements Comparable<Comment> {
 	
 	public void setContent(String content){
 		this.content = content;
+	}
+	
+	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OrderBy("createTime")
+	private List<Response> responses;
+	
+	public List<Response> getResponses() {
+		return responses;
+	}
+	
+	public void setResponses(List<Response> responses) {
+		this.responses = responses;
 	}
 	
 	

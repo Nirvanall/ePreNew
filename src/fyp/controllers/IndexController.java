@@ -27,14 +27,10 @@ public class IndexController {
 			@RequestParam(value = "source", required = false) String source,
 			Model model) {
 		Session session = sessionFactory.openSession();
-    	Query query = session.createQuery("FROM Message AS m WHERE m.toUser IS NULL");
+    	Query query = session.createQuery("FROM Message WHERE toUser IS NULL ORDER BY createTime DESC, id DESC");
     	query.setMaxResults(6);
     	@SuppressWarnings("unchecked") List<Message> announcements = (List<Message>)query.list();
     	model.addAttribute("announcements", announcements);
-    	if (announcements.size() > 5) {
-    		announcements.remove(5);
-    		model.addAttribute("more_announcements", true);
-    	}
     	
     	if (null != source && source.equalsIgnoreCase("login")) {
     		model.addAttribute("error_message", "Incorrect UserID / Incorrect Password");

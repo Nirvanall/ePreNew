@@ -7,50 +7,12 @@
 
 <link rel="stylesheet" type="text/css" href="css/semantic.min.css" />
 <link rel="stylesheet" type="text/css" href="css/page.css" />
-<style type="text/css">
-#row1 .segment{
-	max-width: 360px;
-	width: 360px;
-}
-table{
-	margin-left: auto;
-	margin-right: auto;
-	border-collapse: separate;
-	border-spacing: 10px;
-}
-td{
-	vertical-align: top;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="css/index.css" />
 
 <script type="text/javascript" src="javascript/jquery.js"></script>
 <script type="text/javascript" src="javascript/jquery.form.js"></script>
 <script type="text/javascript" src="javascript/semantic.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	var login_form = $("#login-form");
-	if (1 == login_form.length) {
-		login_form.form({
-			fields: {
-				user: {
-					identifier : "user",
-					rules: [{
-						type   : "empty",
-						prompt : "Please enter your user ID"
-					}]
-				},
-				password: {
-					identifier : "password",
-					rules: [{
-						type   : "empty",
-						prompt : "Please enter a password"
-					}]
-				}
-			}
-		});
-	}
-});
-</script>
+<script type="text/javascript" src="javascript/index.js"></script>
 </head>
 
 <body>
@@ -58,7 +20,7 @@ $(document).ready(function(){
 	<section th:replace="template :: header"></section>
 	<div class="ui divider"></div>
 	
-	<section id="page-content">
+	<section id="page_content">
 	<table>
 		<tr id="row1">
 			<td>
@@ -115,12 +77,19 @@ $(document).ready(function(){
 				<div class="ui blue segment">
 					<h3 class="ui dividing header">Announcements</h3>
 					<p th:if="${#lists.isEmpty(announcements)}">There is no announcements</p>
-					<ul th:if="${not #lists.isEmpty(announcements)}">
-						<li th:each="announcement : ${announcements}">
-							<p th:text="${ announcement.getContent() }"></p>
-							<p style="text-align: right;" th:text="${ announcement.getCreateTimeInfo(null) }"></p>
+					<ul class="ui divided list" th:unless="${#lists.isEmpty(announcements)}">
+						<li class="item" th:each="announcement : ${announcements}">
+							<h5 class="announcement_header">
+								<span th:text="${ announcement.getTitle() }"></span>
+								<i class="ui right floated down angle icon"></i>
+							</h5>
+							<div style="display: none;">
+								<p class="announcement_content" th:text="${ announcement.getContent() }"></p>
+								<p class="announcement_time" th:text="${ announcement.getCreateTimeInfo(null) }"></p>
+							</div>
 						</li>
 					</ul>
+					<a href="annoucement/list.do" th:if="${#lists.size(announcements) > 5}">More Announcements</a>
 				</div>
 			</td>
 		</tr>
