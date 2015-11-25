@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<base th:replace="template :: base" />
+<title>ePre System Announcements</title>
+
+<link rel="stylesheet" type="text/css" href="css/lib/semantic.min.css" />
+<link rel="stylesheet" type="text/css" href="css/page.css" />
+
+<script type="text/javascript" src="javascript/lib/jquery.js"></script>
+<script type="text/javascript" src="javascript/lib/jquery.form.js"></script>
+<script type="text/javascript" src="javascript/lib/semantic.js"></script>
+<script type="text/javascript" src="javascript/table.js"></script>
+
+</head>
+
+<body>
+<article class="ui container page">
+	<section th:replace="template :: header"></section>
+	<div class="ui divider"></div>
+
+	<section id="page_content">
+		<h2 class="ui header">System announcements</h2>
+		<table class="ui unstackable table">
+			<thead>
+				<tr>
+					<th>Title
+						<i class="ui search icon link"></i>
+						<div class="ui popup">
+							<div data-content="id" class="ui icon input">
+								<input type="text" placeholder="Search title" />
+								<i class="inverted circular search link icon"></i>
+							</div>
+						</div>
+					</th>
+					<th>Content
+						<i class="ui search icon link"></i>
+						<div class="ui popup">
+							<div data-content="content" class="ui icon input">
+								<input type="text" placeholder="Search content" />
+								<i class="inverted circular search link icon"></i>
+							</div>
+						</div>
+					</th>
+					<th>Time
+						<i class="ui search icon link"></i>
+						<div class="ui popup">
+							<span data-content="from_time" class="ui labeled input">
+								<label class="ui label">From</label>
+								<input type="date"/>
+							</span>
+							<span data-content="to_time" class="ui labeled input">
+								<label class="ui label">To</label>
+								<input type="date"/>
+							</span>
+							<i class="inverted circular search link icon"></i>
+						</div>
+					</th>
+					<th th:if="${ isAdmin }">Operations</th>
+				</tr>
+			</thead>
+			<tbody data-edit_url="/admin/announcement/edit.do" data-delete_url="/admin/announcement/delete.do">
+				<tr th:each="announcement : ${announcements}">
+					<td th:text="${ announcement.getTitle() }"></td>
+					<td th:text="${ announcement.getContent() }"></td>
+					<td th:text="${ announcement.getCreateTimeInfo(null) }"></td>
+					<td th:attr="data-id=${ announcement.getId() }">
+						<i class="ui edit icon link" data-content="Edit"></i>
+						<i class="ui trash icon link" data-content="Delete"></i>
+					</td>
+				</tr>
+				<tr th:if="${#lists.isEmpty(announcements)}">
+					<td>There is no system announcements</td>
+				</tr>
+			</tbody>
+			<tfoot th:unless="${#lists.isEmpty(announcements)}">
+				<tr th:replace="template :: pagination"></tr>
+			</tfoot>
+		</table>
+	</section>
+	
+	<div th:replace="template :: footer"></div>
+</article>
+</body>
+</html>

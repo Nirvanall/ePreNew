@@ -46,6 +46,14 @@ public class LoginController {
         return "redirect:guest.do";
 	}
 	
+	@RequestMapping(value = "/logout.do")
+	public String logoutAction(
+			HttpSession httpSession,
+			Model model
+	) {
+		httpSession.removeAttribute("user");
+		return "redirect:index.do";
+	}
 	
 	@RequestMapping(value = "/password.do", method = RequestMethod.GET)
 	public String passwordAction(

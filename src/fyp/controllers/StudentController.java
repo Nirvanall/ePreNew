@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import fyp.models.User;
 import fyp.models.Video;
 
+/**
+ * Student Page
+ * The list of the student's videos
+ */
 @Controller
 public class StudentController {
 	private SessionFactory sessionFactory;
@@ -40,15 +44,24 @@ public class StudentController {
 		if (null == page || page <= 0) page = 1;
 		if (null == number || number <= 0) number = 10;
 		int offset = number * (page - 1);
+		model.addAttribute("page", page);
 		
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery(
+				"SELECT COUNT(*) FROM Video WHERE owner.id=:userId ");
+		query.setInteger("userId", user.getId());
+		Long totalCount = (Long)query.uniqueResult();
+		Long totalPages = totalCount / number + (totalCount % number != 0 ? 1 : 0);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("totalPages", totalPages);
+		
+		query = session.createQuery(
 				"FROM Video AS v WHERE v.owner.id=:userId " +
 				"ORDER BY v.presentation.yearSemester DESC, " +
 					"v.presentation.department.abbreviation, " +
 					"v.presentation.createTime DESC, " +
 					"v.createTime DESC");
-		query.setParameter("userId", user.getId()).setFirstResult(offset).setMaxResults(number);
+		query.setInteger("userId", user.getId()).setFirstResult(offset).setMaxResults(number);
 		@SuppressWarnings("unchecked") List<Video> videos = (List<Video>)query.list();
 		model.addAttribute("videos", videos);
 		

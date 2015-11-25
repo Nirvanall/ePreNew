@@ -26,17 +26,34 @@
 			<thead>
 				<tr>
 					<th>Semester
-						<i class="ui search icon"></i>
-						<div></div>
+						
 					</th>
 					<th>Department
-						<i class="ui search icon"></i>
+						<i class="ui search icon link"></i>
+						<div class="ui popup">
+							<div data-content="department" class="ui icon input">
+								<input type="text" placeholder="Search department" />
+								<i class="inverted circular search link icon"></i>
+							</div>
+						</div>
 					</th>
 					<th>Presentation
-						<i class="ui search icon"></i>
+						<i class="ui search icon link"></i>
+						<div class="ui popup">
+							<div data-content="presentation" class="ui icon input">
+								<input type="text" placeholder="Search presentation" />
+								<i class="inverted circular search link icon"></i>
+							</div>
+						</div>
 					</th>
 					<th>Name
-						<i class="ui search icon"></i>
+						<i class="ui search icon link"></i>
+						<div class="ui popup">
+							<div data-content="name" class="ui icon input">
+								<input type="text" placeholder="Search name" />
+								<i class="inverted circular search link icon"></i>
+							</div>
+						</div>
 					</th>
 					<th>Operations</th>
 				</tr>
@@ -48,8 +65,8 @@
 					<td th:text="${ video.getPresentation().getName() }"></td>
 					<td th:text="${ video.getName() }"></td>
 					<td th:attr="data-id=${ video.getId() }">
-						<i class="ui edit icon" data-content="Edit" onclick="editVideo(event);"></i>
-						<i class="ui trash icon" data-content="Delete" onclick="deleteVideo(event);"></i>
+						<i class="ui edit icon link" data-content="Edit"></i>
+						<i class="ui trash icon link" data-content="Delete"></i>
 					</td>
 				</tr>
 				<tr th:if="${#lists.isEmpty(videos)}">
@@ -57,13 +74,7 @@
 				</tr>
 			</tbody>
 			<tfoot th:unless="${#lists.isEmpty(videos)}">
-				<tr>
-					<td colSpan="4"><div class="ui center floated pagination menu">
-						<a class="icon item"><i class="left chevron icon"></i></a>
-						<a class="item">1</a>
-						<a class="icon item"><i class="right chevron icon"></i></a>
-					</div></td>
-				</tr>
+				<tr th:replace="template :: pagination"></tr>
 			</tfoot>
 		</table>
 	</section>

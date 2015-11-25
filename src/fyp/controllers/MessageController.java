@@ -20,6 +20,10 @@ import fyp.JsonResponse;
 import fyp.models.Message;
 import fyp.models.User;
 
+/**
+ * System announcement (toUser IS NULL (to_user_id IS NULL))
+ * And Message
+ */
 @Controller
 public class MessageController {
 	private SessionFactory sessionFactory;
@@ -28,100 +32,7 @@ public class MessageController {
 		this.sessionFactory = sessionFactory;
 	}
 	
-	@RequestMapping(value = "admin/announcement/edit.do", method = RequestMethod.GET)
-	public String announcementAction(
-			@RequestParam(value = "id") Integer id,
-			HttpSession httpSession,
-			Model model
-	) {
-		User user = (User)httpSession.getAttribute("user");
-		if (null == user || !user.isAdmin()) return "redirect:index.do";
-		model.addAttribute("user_id", user.getUserId());
-		model.addAttribute("user_name", user.getName());
-		
-		if (null != id) {
-			Session session = sessionFactory.openSession();
-			Query query = session.createQuery("FROM Message AS m WHERE m.id = :id AND m.toUser IS NULL");
-			query.setInteger("id", id);
-			Message announcement = (Message)query.uniqueResult();
-			if (null != announcement) {
-				model.addAttribute("announcement", announcement);
-			}
-		}
-		return "admin" + File.pathSeparator + "annoucement" + File.pathSeparator + "edit";
-	}
-	
-	@RequestMapping(value = "admin/announcement/edit.do", method = RequestMethod.POST)
-	public @ResponseBody JsonResponse editAnnoucementAction(
-			@RequestParam(value = "id") Integer id,
-			@RequestParam(value = "title", required = true) String title,
-			@RequestParam(value = "content", required = true) String content,
-			HttpSession httpSession,
-			Model model
-	) {
-		User user = (User)httpSession.getAttribute("user");
-		if (null == user || !user.isAdmin()) {
-			return JsonResponse.getFailLoginInstance(null);
-		}
-		
-		Session session = sessionFactory.openSession();
-		Message announcement = null;
-		if (null == id || 0 == id) {
-			announcement = new Message();
-			announcement.setFromUser(user);
-			announcement.setTitle(title);
-			announcement.setContent(content);
-			session.save(announcement);
-		} else {
-			Query query = session.createQuery("FROM Message AS m WHERE m.id = :id");
-			query.setInteger("id", id);
-			announcement = (Message)query.uniqueResult();
-			if (null == announcement) {
-				return JsonResponse.getFailNotFoundInstance(null, Message.class);
-			}
-			if (announcement.getToUser() != null) {
-				return JsonResponse.getFailInstance(
-						"The message of the requested id is not an annoucement");
-			}
-			announcement.setTitle(title);
-			announcement.setContent(content);
-			session.update(announcement);
-		}
-		return new JsonResponse("{message_id:" + announcement.getId() + "}");
-	}
-	
-	@RequestMapping(value = "admin/announcement/table.do", method = RequestMethod.GET)
-	public String listMessageAction(
-			@RequestParam(value = "page") Integer page,
-			@RequestParam(value = "number") Integer number,
-			// TODO: search filter
-			HttpSession httpSession,
-			Model model
-	) {
-		User user = (User)httpSession.getAttribute("user");
-		if (null == user) return "redirect:index.do";
-		model.addAttribute("user_id", user.getUserId());
-		model.addAttribute("user_name", user.getName());
-		
-		if (null == page || page <= 0) page = 1;
-		if (null == number || number <= 0) number = 10;
-		int offset = number * (page - 1);
-		
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery(
-				"FROM Message AS m WHERE m.toUser IS NULL ORDER BY m.create_time DESC");
-		query.setFirstResult(offset).setMaxResults(number);
-		@SuppressWarnings("unchecked")
-		List<Message> announcements = (List<Message>)query.list();
-		model.addAttribute("announcements", announcements);
-		if (user.isAdmin()) {
-			// model.addAttribute("", "");
-		}
-		return "admin" + File.pathSeparator + "announcement" + File.pathSeparator + "table";
-	}
-	
-	
-	@RequestMapping(value = "message/edit.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/message/edit.do", method = RequestMethod.GET)
 	public String messageAction(
 			@RequestParam(value = "id") Integer id,
 			HttpSession httpSession,
@@ -144,7 +55,7 @@ public class MessageController {
 		return "message" + File.pathSeparator + "edit";
 	}
 	
-	@RequestMapping(value = "message/edit.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/message/edit.do", method = RequestMethod.POST)
 	public @ResponseBody JsonResponse editMessageAction(
 			@RequestParam(value = "id") Integer id,
 			@RequestParam(value = "toUserId", required = true) String toUserId,
@@ -166,7 +77,7 @@ public class MessageController {
 			session.save(message);
 		} else {
 			Query query = session.createQuery(
-					"FROM Message AS m WHERE m.id = :id AND m.toUser IS NOT NULL");
+					"FROM Message WHERE id = :id AND toUser IS NOT NULL AND status = 0");
 			query.setInteger("id", id);
 			message = (Message)query.uniqueResult();
 			if (null == message) {
@@ -185,11 +96,11 @@ public class MessageController {
 			message.setContent(content);
 			session.update(message);
 		}
-		return new JsonResponse("{message_id:" + message.getId() + "}");
+		return new JsonResponse(); // TODO: 
 	}
 	
-	@RequestMapping(value = "message/table.do", method = RequestMethod.GET)
-	public String messageTableAction(
+	@RequestMapping(value = "/message/table/from.do", method = RequestMethod.GET)
+	public String listFromAction(
 			@RequestParam(value = "page") Integer page,
 			@RequestParam(value = "number") Integer number,
 			// TODO: search filter
@@ -205,11 +116,54 @@ public class MessageController {
 		
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery(
-				"FROM Message AS m WHERE m.toUser = :toUser ORDER BY m.create_time DESC");
-		query.setParameter("toUser", user).setFirstResult(offset).setMaxResults(number);
-		@SuppressWarnings("unchecked")
-		List<Message> messages = (List<Message>)query.list();
+				"SELECT COUNT(*) FROM Message WHERE fromUser.id = :userId:");
+		query.setInteger("userId", user.getId());
+		Long totalCount = (Long)query.uniqueResult();
+		Long totalPages = totalCount / number + (totalCount % number != 0 ? 1 : 0);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("totalPages", totalPages);
+		
+		query = session.createQuery(
+				"FROM Message WHERE fromUser.id = :userId ORDER BY create_time DESC");
+		query.setInteger("userId", user.getId()).setFirstResult(offset).setMaxResults(number);
+		@SuppressWarnings("unchecked") List<Message> messages = (List<Message>)query.list();
 		model.addAttribute("messages", messages);
+		model.addAttribute("from", true);
+		
+		return "message" + File.pathSeparator + "table";
+	}
+
+	@RequestMapping(value = "/message/table/to.do", method = RequestMethod.GET)
+	public String listToAction(
+			@RequestParam(value = "page") Integer page,
+			@RequestParam(value = "number") Integer number,
+			// TODO: search filter
+			HttpSession httpSession,
+			Model model
+	) {
+		User user = (User)httpSession.getAttribute("user");
+		if (null == user) return "redirect:index.do";
+		
+		if (null == page || page <= 0) page = 1;
+		if (null == number || number <= 0) number = 10;
+		int offset = number * (page - 1);
+		
+		Session session = sessionFactory.openSession();
+		Query query = session.createQuery(
+				"SELECT COUNT(*) FROM Message WHERE toUser.id = :userId:");
+		query.setInteger("userId", user.getId());
+		Long totalCount = (Long)query.uniqueResult();
+		Long totalPages = totalCount / number + (totalCount % number != 0 ? 1 : 0);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("totalPages", totalPages);
+		
+		query = session.createQuery(
+				"FROM Message WHERE toUser.id = :userId ORDER BY create_time DESC");
+		query.setInteger("userId", user.getId()).setFirstResult(offset).setMaxResults(number);
+		@SuppressWarnings("unchecked") List<Message> messages = (List<Message>)query.list();
+		model.addAttribute("messages", messages);
+		model.addAttribute("from", false);
+		
 		return "message" + File.pathSeparator + "table";
 	}
 }

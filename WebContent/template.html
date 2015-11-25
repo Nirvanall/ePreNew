@@ -17,11 +17,31 @@
 		<div id="my_user_info" class="three wide column" th:if="${ null != user_id }">
 			<span th:text="${ user_id }"></span><br/>
 			<span th:text="${ user_name }"></span><br/>
-			<a href="password.do">Change Password</a><br/>
+			<a href="password.do" target="_blank">Change Password</a><br/>
 			<a href="logout.do">Logout</a>
 		</div>
 	</section>
 	<div class="ui divider"></div>
+	
+	<section>
+		<table>
+			<tfoot>
+				<tr th:fragment="pagination">
+					<td class="pagination_menu" style="text-align: center;" th:attr="data-page=${ page }">
+						<button class="ui icon button first_page"><i class="left double angle icon"></i></button>
+						<button class="ui icon button prev_page"><i class="left angle icon"></i></button>
+						<span class="ui labeled action input">
+							<label class="ui label">Page</label>
+							<input name="page_number" type="number" min="1" th:max="${ totalPage > 0 ? totalPage : 1 }" th:value="${ page }"/>
+							<button class="ui button jump_page">Go</button>
+						</span>
+						<button class="ui icon button next_page"><i class="right angle icon"></i></button>
+						<button class="ui icon button last_page"><i class="right double angle icon"></i></button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</section>
 	
 	<div id="page_footer" class="ui inverted blue segment" th:fragment="footer">Copyright &copy; 2015 The Hong Kong Polytechnic University. All Rights Reserved</div>
 </article>

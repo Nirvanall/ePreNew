@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import fyp.models.Message;
 
+/**
+ * Homepage
+ * Login page and the first 5 announcements
+ */
 @Controller
 public class IndexController {
 	private SessionFactory sessionFactory;
