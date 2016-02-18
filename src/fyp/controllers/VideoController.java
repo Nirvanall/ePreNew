@@ -58,7 +58,9 @@ public class VideoController {
 				return ""; // TODO: no access permission page
 			
 			model.addAttribute("assessment", a);
-		}
+		} else {
+            model.addAttribute("assessment", null);
+        }
 		model.addAttribute("video", v);
 		
 		return "video";

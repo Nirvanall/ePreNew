@@ -113,4 +113,13 @@ public class Video extends IdStatusTimeModel implements Comparable<Video> {
 		
 		return -(createTime.compareTo(video.createTime));
 	}
+
+
+    public String getPath() {
+        Presentation p = this.getPresentation();
+        return p.getDepartment().getAbbreviation() + File.seperator +
+                p.getYearSemester() + File.seperator +
+                "Pre" + p.getId() + File.seperator +
+                this.getOwner().getUserId() + "_" + this.getId();
+    }
 }

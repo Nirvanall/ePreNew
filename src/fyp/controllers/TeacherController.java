@@ -43,7 +43,7 @@ public class TeacherController {
 		
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery("FROM Video AS v " +
-				"JOIN FETCH v.presentation JOIN FETCH v.presentation.department" +
+				"JOIN FETCH v.presentation JOIN FETCH v.presentation.department " +
 				"WHERE v.id IN (SELECT a.video_id FROM Assessment AS a " +
 					"WHERE a.viewer.id = :userId AND a.status = 0) AND " +
 				"v.status = 0 " +

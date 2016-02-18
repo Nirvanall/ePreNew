@@ -5,13 +5,13 @@
 <base th:replace="template :: base" />
 <title th:text="${ video.getName() }"></title>
 
-<link rel="stylesheet" type="text/css" href="css/semantic.min.css" />
+<link rel="stylesheet" type="text/css" href="css/lib/semantic.min.css" />
 <link rel="stylesheet" type="text/css" href="css/page.css" />
 <link rel="stylesheet" type="text/css" href="css/video.css" />
 
-<script type="text/javascript" src="javascript/jquery.js"></script>
-<script type="text/javascript" src="javascript/jquery.form.js"></script>
-<script type="text/javascript" src="javascript/semantic.js"></script>
+<script type="text/javascript" src="javascript/lib/jquery.js"></script>
+<script type="text/javascript" src="javascript/lib/jquery.form.js"></script>
+<script type="text/javascript" src="javascript/lib/semantic.js"></script>
 <script type="text/javascript" src="javascript/password.js"></script>
 </head>
 
@@ -24,9 +24,9 @@
 	<table>
 		<tr>
 			<td colspan="2">
-				<video width="" height="">
-					<source src=".mp4"/>
-					<source src=".webm"/>
+				<video id="videoPlayer" controls preload="auto" width="800" height="450">
+					<source type="video/mp4" th:attr="src=${ video.getPath() } + '.mp4'"/>
+					<source type="video/webm" th:attr="src=${ video. getPath() } + '.webm'"/>
 				</video>
 			</td>
 			<td>
