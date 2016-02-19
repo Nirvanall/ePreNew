@@ -28,22 +28,22 @@ public class LoginController {
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public String loginAction(
 			@RequestParam(value="user", required=true) String userId,
-    		@RequestParam(value="password", required=true) String password,
-    		HttpSession httpSession,
-    		Model model
-    ) {
+			@RequestParam(value="password", required=true) String password,
+			HttpSession httpSession,
+			Model model
+	) {
 		Session session = sessionFactory.openSession();
-    	Query query = session.createQuery("FROM User WHERE userId=:userId AND password=sha2(:password, 256)");
-    	query.setString("userId", userId).setString("password", password);
-    	User user = (User)query.uniqueResult();
-    	if (null == user) return "redirect:index.do?source=login";
+		Query query = session.createQuery("FROM User WHERE userId=:userId AND password=sha2(:password, 256)");
+		query.setString("userId", userId).setString("password", password);
+		User user = (User)query.uniqueResult();
+		if (null == user) return "redirect:index.do?source=login";
 
-    	httpSession.setAttribute("user", user);
-    	
-        if (user.isAdmin()) return "redirect:admin.do";
-        if (user.isTeacher()) return "redirect:teacher.do";
-        if (user.isStudent()) return "redirect:student.do";
-        return "redirect:guest.do";
+		httpSession.setAttribute("user", user);
+		
+		if (user.isAdmin()) return "redirect:admin.do";
+		if (user.isTeacher()) return "redirect:teacher.do";
+		if (user.isStudent()) return "redirect:student.do";
+		return "redirect:guest.do";
 	}
 	
 	@RequestMapping(value = "/logout.do")
@@ -80,15 +80,15 @@ public class LoginController {
 		if (null == user) return JsonResponse.getFailLoginInstance(null);
 		
 		Session session = sessionFactory.openSession();
-    	Query query = session.createQuery("FROM User WHERE id=:id AND password=sha2(:password, 256)");
-    	query.setInteger("id", user.getId()).setString("password", oldPassword);
-    	user = (User)query.uniqueResult();
-    	if (null == user) return JsonResponse.getFailPasswordInstance(null);
-    	
-    	user.setPassword(User.sha256(newPassword));
-    	session.update(user);
-    	httpSession.setAttribute("user", user);
-    	
+		Query query = session.createQuery("FROM User WHERE id=:id AND password=sha2(:password, 256)");
+		query.setInteger("id", user.getId()).setString("password", oldPassword);
+		user = (User)query.uniqueResult();
+		if (null == user) return JsonResponse.getFailPasswordInstance(null);
+		
+		user.setPassword(User.sha256(newPassword));
+		session.update(user);
+		httpSession.setAttribute("user", user);
+		
 		return new JsonResponse();
 	}
 }

@@ -38,7 +38,7 @@ public class VideoController {
 			Model model
 	) {
 		User user = (User)httpSession.getAttribute("user");
-		if (null == user) return "redirect:index.do";
+		if (null == user) return "redirect:../index.do";
 		model.addAttribute("user_id", user.getUserId());
 		model.addAttribute("user_name", user.getName());
 		
@@ -47,7 +47,7 @@ public class VideoController {
 		query.setInteger("videoId", videoId);
 		Video v = (Video)query.uniqueResult();
 		if (null == v)
-			return ""; // TODO: video not found page
+			return "errors/video-not-found"; // TODO: video not found page
 		
 		if (v.getOwner().getId() != user.getId()) {
 			query = session.createQuery("FROM Assessment a " +
@@ -55,12 +55,12 @@ public class VideoController {
 			query.setInteger("videoId", videoId).setInteger("userId", user.getId());
 			Assessment a = (Assessment)query.uniqueResult();
 			if (null == a)
-				return ""; // TODO: no access permission page
+				return "errors/no-permission"; // TODO: no access permission page
 			
 			model.addAttribute("assessment", a);
 		} else {
-            model.addAttribute("assessment", null);
-        }
+			model.addAttribute("assessment", null);
+		}
 		model.addAttribute("video", v);
 		
 		return "video";

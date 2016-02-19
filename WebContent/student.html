@@ -11,8 +11,7 @@
 <script type="text/javascript" src="javascript/lib/jquery.js"></script>
 <script type="text/javascript" src="javascript/lib/jquery.form.js"></script>
 <script type="text/javascript" src="javascript/lib/semantic.js"></script>
-<script type="text/javascript">
-</script>
+<script type="text/javascript" src="javascript/table.js"></script>
 </head>
 
 <body>
@@ -60,9 +59,9 @@
 			</thead>
 			<tbody>
 				<tr th:each="video : ${videos}">
-					<td th:text="${ video.getPresentation().infoSemesterFull() }"></td>
-					<td th:text="${ video.getPresentation().getDepartment().getAbbreviation() }"></td>
-					<td th:text="${ video.getPresentation().getName() }"></td>
+					<td><a th:href="'video/view.do?id=' + ${ video.getId() }" th:text="${ video.getPresentation().infoSemesterFull() }"></a></td>
+					<td><a th:href="'video/view.do?id=' + ${ video.getId() }" th:text="${ video.getPresentation().getDepartment().getAbbreviation() }"></a></td>
+					<td><a th:href="'video/view.do?id=' + ${ video.getId() }" th:text="${ video.getPresentation().getName() }"></a></td>
 					<td><a th:href="'video/view.do?id=' + ${ video.getId() }" th:text="${ video.getName() }"></a></td>
 					<td th:attr="data-id=${ video.getId() }">
 						<i class="ui edit icon link" data-content="Edit"></i>

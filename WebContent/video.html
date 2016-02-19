@@ -12,7 +12,7 @@
 <script type="text/javascript" src="javascript/lib/jquery.js"></script>
 <script type="text/javascript" src="javascript/lib/jquery.form.js"></script>
 <script type="text/javascript" src="javascript/lib/semantic.js"></script>
-<script type="text/javascript" src="javascript/password.js"></script>
+<script type="text/javascript" src="javascript/video.js"></script>
 </head>
 
 <body>
@@ -21,16 +21,17 @@
 	<div class="ui divider"></div>
 	
 	<section id="page-content">
+	<h2 class="ui header" th:text="${ video.getName() }"></h2>
 	<table>
 		<tr>
 			<td colspan="2">
-				<video id="videoPlayer" controls preload="auto" width="800" height="450">
-					<source type="video/mp4" th:attr="src=${ video.getPath() } + '.mp4'"/>
-					<source type="video/webm" th:attr="src=${ video. getPath() } + '.webm'"/>
+				<video id="videoPlayer" controls="controls" preload="auto" width="800" height="450">
+					<source type="video/mp4" th:src="${ video.getPath() } + '.mp4'"/>
+					<source type="video/webm" th:src="${ video. getPath() } + '.webm'"/>
 				</video>
 			</td>
 			<td>
-				<div class="ui blue segment">
+				<div id="comment_div" class="ui blue segment">
 					<h3 class="ui header">Comments</h3>
 					<ul id="comment_list">
 						<li th:each="comment : ${video.getComments()}">
@@ -50,14 +51,14 @@
 			</td>
 		</tr>
 		<tr>
-			<td th:if="${ null != assessment && assessment.canComment() }">
+			<td th:if="null != ${ assessment } and ${ assessment.canComment() }">
 				<textarea id="comment"></textarea>
 			</td>
-			<td th:if="${ null != assessment && assessment.canComment() }">
+			<td th:if="null != ${ assessment } and ${ assessment.canComment() }">
 				<button class="ui blue button" id="comment_button">Submit</button>
 			</td>
 			<td>
-				<form class="ui form" th:if="${ null != assessment && assessment.canGrade() }">
+				<form class="ui form" th:if="null != ${ assessment } and ${ assessment.canGrade() }">
 					<div class="field">
 						<label>Grade</label>
 						<input type="number" min="0" max="100" name="grade" th:value="${ assessment.gradeValue() }"/>
