@@ -1,5 +1,6 @@
 package fyp.models;
 
+import java.io.File;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -112,5 +113,10 @@ public class Video extends IdStatusTimeModel implements Comparable<Video> {
 		if (0 != result) return result;
 		
 		return -(createTime.compareTo(video.createTime));
+	}
+	
+	public String getPath(){
+		Presentation p = this.getPresentation();
+		return p.getDepartment().getAbbreviation() + File.separator + p.getYearSemester() + File.separator + p.getId() + File.separator + this.getOwner().getId() + "_" + this.getId();
 	}
 }

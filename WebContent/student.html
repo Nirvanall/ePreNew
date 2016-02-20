@@ -5,12 +5,12 @@
 <base th:replace="template :: base" />
 <title>ePre Student Page</title>
 
-<link rel="stylesheet" type="text/css" href="css/semantic.min.css" />
+<link rel="stylesheet" type="text/css" href="css/lib/semantic.min.css" />
 <link rel="stylesheet" type="text/css" href="css/page.css" />
 
-<script type="text/javascript" src="javascript/jquery.js"></script>
-<script type="text/javascript" src="javascript/jquery.form.js"></script>
-<script type="text/javascript" src="javascript/semantic.js"></script>
+<script type="text/javascript" src="javascript/lib/jquery.js"></script>
+<script type="text/javascript" src="javascript/lib/jquery.form.js"></script>
+<script type="text/javascript" src="javascript/lib/semantic.js"></script>
 <script type="text/javascript">
 </script>
 </head>
@@ -63,7 +63,7 @@
 					<td th:text="${ video.getPresentation().infoSemesterFull() }"></td>
 					<td th:text="${ video.getPresentation().getDepartment().getAbbreviation() }"></td>
 					<td th:text="${ video.getPresentation().getName() }"></td>
-					<td th:text="${ video.getName() }"></td>
+					<td><a th:href="'video/view.do?id=' + ${ video.getId() }" th:text="${ video.getName() }"></a></td>				
 					<td th:attr="data-id=${ video.getId() }">
 						<i class="ui edit icon link" data-content="Edit"></i>
 						<i class="ui trash icon link" data-content="Delete"></i>

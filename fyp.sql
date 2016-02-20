@@ -159,6 +159,7 @@ INSERT INTO `Departments` (`abbreviation`, `name`) VALUES
 INSERT INTO `Accounts` (`user_id`, `name`, `password`, `department_id`, `category`) VALUES
 	("admin", "Administrator", sha2("FYPfyp", 256), 14, 0),
 	("13116487d", "Wu Yuping", sha2("13116487d", 256), 14, 1),
+	("14122983d","Liu Lu", sha2("14122983d", 256), 14, 1),
 	("enchikin", "Dr. Leung Chi-Kin", sha2("enchikin", 256), 14, 2);
 
 INSERT INTO `Messages` (`from_user_id`, `title`, `content`) VALUES
