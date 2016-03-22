@@ -21,11 +21,11 @@
 	<div class="ui divider"></div>
 	
 	<section id="page-content">
-	<h2 class="ui header" th:text="${ video.getName() }"></h2>
+	<h2 id="video_title" class="ui header" th:text="${ video.getName() }" data-id="${ video.getId() }"></h2>
 	<table>
 		<tr>
 			<td colspan="2">
-				<video id="videoPlayer" controls="controls" preload="auto" width="800" height="450">
+				<video id="video_player" controls="controls" preload="auto" width="800" height="450">
 					<source type="video/mp4" th:src="${ video.getPath() } + '.mp4'"/>
 					<source type="video/webm" th:src="${ video. getPath() } + '.webm'"/>
 				</video>
@@ -33,8 +33,8 @@
 			<td>
 				<div id="comment_div" class="ui blue segment">
 					<h3 class="ui header">Comments</h3>
-					<ul id="comment_list">
-						<li th:each="comment : ${video.getComments()}">
+					<ul id="comment_list" class="ui selection list">
+						<li th:each="comment : ${video.getComments()}" th:attr="data-time=${comment.getPlaytime()}">
 							<p class="comment_header">
 								<span class="comment_playtime" th:text="${ comment.playtimeInfo() }"></span>
 								<span class="commenter" th:text="${ comment.getCommenter().getName() }"></span>
@@ -42,8 +42,8 @@
 							<p class="comment_content" th:text="${ comment.getContent() }"></p>
 							<p class="comment_operation" th:if="${ comment.getCommenter().getUserId() == user_id }"
 									th:attr="data-id=${ comment.getId() }">
-								<a href="javascript:void(0);" onclick="editComment(event);">Edit</a>
-								<a href="javascript:void(0);" onclick="deleteComment(event);">Delete</a>
+								<a href="javascript:void(0);" class="comment_edit">Edit</a>
+								<a href="javascript:void(0);" class="comment_delete">Delete</a>
 							</p>
 						</li>
 					</ul>
@@ -55,7 +55,7 @@
 				<textarea id="comment"></textarea>
 			</td>
 			<td th:if="null != ${ assessment } and ${ assessment.canComment() }">
-				<button class="ui blue button" id="comment_button">Submit</button>
+				<button class="ui blue button" id="comment_button" disabled="disabled">Submit</button>
 			</td>
 			<td>
 				<form class="ui form" th:if="null != ${ assessment } and ${ assessment.canGrade() }">
