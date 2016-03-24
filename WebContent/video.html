@@ -21,15 +21,18 @@
 <article class="ui container page">
 	<section th:replace="template :: header"></section>
 	<div class="ui divider"></div>
-	
+ 
+
 	<section id="page-content">
 	<table>
 		<tr>
 			<td colspan="2">
-				<video width="320" height="240">
-					<source th:src="${video.getPath()} + '.mp4'" />
-					<source th:src="${video.getPath()} + '.webm'" />
+				<video id="video1" width="440" height="330">
+					<source th:src="@{${video.getPath() + '.mp4'}}" type="video/mp4" />
+					<source th:src="@{${video.getPath() + '.webm'}}" type="video/webm" />
 				</video>
+				<br></br>
+				<p>Current Comment: <span id="tComment"></span></p>
 			</td>
 			<td>
 				<div class="ui blue segment">
@@ -37,7 +40,7 @@
 					<ul id="comment_list">
 						<li th:each="comment : ${video.getComments()}">
 							<p class="comment_header">
-								<span class="comment_playtime" th:text="${ comment.playtimeInfo() }"></span>
+								<span class="comment_playtime" th:attr="ct=${comment.getPlaytime()}" th:text="${ comment.playtimeInfo() }"></span>
 								<span class="commenter" th:text="${ comment.getCommenter().getName() }"></span>
 							</p>
 							<p class="comment_content" th:text="${ comment.getContent() }"></p>
@@ -45,27 +48,30 @@
 									th:attr="data-id=${ comment.getId() }">
 								<a href="javascript:void(0);" onclick="editComment(event);">Edit</a>
 								<a href="javascript:void(0);" onclick="deleteComment(event);">Delete</a>
-							</p>
+							</p><br></br>
 						</li>
 					</ul>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td th:if="${ null != assessment && assessment.canComment() }">
-				<textarea id="comment"></textarea>
-			</td>
-			<td th:if="${ null != assessment && assessment.canComment() }">
-				<button class="ui blue button" id="comment_button">Submit</button>
+			<td>
+			<form class="ui form" th:if="${null!=assessment&amp;&amp;assessment.canComment()}">
+			    <div class="field">
+			        <label>Add Comment</label><br></br>
+				    <input type="text" id="comment" name="content"/>
+				    <input type="button" class="ui blue button" id="comment_button" value="Submit" onclick="addComment()"/>
+			    </div>
+			</form>
 			</td>
 			<td>
-				<form class="ui form" th:if="${ null != assessment && assessment.canGrade() }">
+				<form class="ui form" th:if="${ null != assessment &amp;&amp; assessment.canGrade() }">
 					<div class="field">
 						<label>Grade</label>
 						<input type="number" min="0" max="100" name="grade" th:value="${ assessment.gradeValue() }"/>
 					</div>
 				</form>
-				Average Grade: <span th:text="${ video.averageGrade() }"></span>
+				<!-- Average Grade: <span th:text="${ video.averageGrade() }"></span> -->
 			</td>
 		</tr>
 	</table>
@@ -73,5 +79,37 @@
 	
 	<div th:replace="template :: footer"></div>
 </article>
+
+<script> 
+var myVideo = document.getElementById("video1"); 
+
+
+//myVideo.currentTime = 60;
+myVideo.controls=true;
+myVideo.load();
+
+/* myVideo.onplay = function() {setControls()};
+function setControls(){
+ 	myVideo.controls = true;
+} */
+
+ myVideo.ontimeupdate = function() {checkComment()};
+ 
+ function checkComment() {
+	 
+	document.getElementById("tComment").innerHTML = myVideo.currentTime;
+ }
+
+function setCurTime(t) {
+	myVideo.currentTime = t;
+}
+/* function addComment(){
+	 var form = document.forms[0];
+	 form.action = "index.do";
+	 form.method = "get";
+	 form.submit();
+ }  */
+
+</script> 
 </body>
 </html>

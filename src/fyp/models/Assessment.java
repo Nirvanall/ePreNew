@@ -75,7 +75,7 @@ public class Assessment extends IdStatusTimeModel {
 		return null != grade ? grade.toString() : "";
 	}
 	
-	@Column(name = "grade_weight")
+/*	@Column(name = "grade_weight")
 	private Byte gradeWeight;
 	
 	public Byte getGradeWeight() {
@@ -84,6 +84,6 @@ public class Assessment extends IdStatusTimeModel {
 	
 	public void setGradeWeight(Byte gradeWeight) {
 		this.gradeWeight = gradeWeight;
-	}
+	}*/
 	
 }
