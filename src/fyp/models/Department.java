@@ -2,8 +2,6 @@ package fyp.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -12,21 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table(name = "Departments")
 @DynamicUpdate
-public class Department extends StatusTimeModel implements Comparable<Department> {
+public class Department extends IdStatusTimeModel implements Comparable<Department> {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@GeneratedValue
-	private Byte id;
-	
-	public Byte getId(){
-		return id;
-	}
-	
-	public void setId(Byte id){
-		this.id = id;
-	}
 	
 	@Column(length = 8, nullable = false, unique = true)
 	private String abbreviation;

@@ -6,12 +6,10 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import fyp.JsonResponse;
 import fyp.models.Assessment;
@@ -20,7 +18,7 @@ import fyp.models.StatusTimeModel;
 import fyp.models.User;
 import fyp.models.Video;
 
-@Controller
+@RestController
 @RequestMapping("/comment")
 public class CommentController {
 	private SessionFactory sessionFactory;
@@ -29,7 +27,7 @@ public class CommentController {
 		this.sessionFactory = sessionFactory;
 	}
 	
-	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/create.do", method = RequestMethod.POST)
 	public JsonResponse createAction(
 			@RequestParam(value = "video_id") Integer videoId,
 			@RequestParam(value = "playtime") Float playtime,
@@ -55,6 +53,7 @@ public class CommentController {
 			
 		Comment c = new Comment();
 		c.setCommenter(user);
+		c.setVideo(v);
 		c.setPlaytime(playtime);
 		c.setContent(content);
 		session.saveOrUpdate(c);
@@ -62,7 +61,7 @@ public class CommentController {
 		return new JsonResponse();
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/update.do", method = RequestMethod.POST)
 	public JsonResponse updateAction(
 			@RequestParam(value = "id") Integer commentId,
 			@RequestParam(value = "content") String content,
@@ -86,7 +85,7 @@ public class CommentController {
 		return new JsonResponse();
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)
 	public JsonResponse deleteAction(
 			@RequestParam(value = "id") Integer commentId,
 			HttpSession httpSession

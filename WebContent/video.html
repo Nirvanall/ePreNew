@@ -21,7 +21,7 @@
 	<div class="ui divider"></div>
 	
 	<section id="page-content">
-	<h2 id="video_title" class="ui header" th:text="${ video.getName() }" data-id="${ video.getId() }"></h2>
+	<h2 id="video_title" class="ui header" th:text="${ video.getName() }" th:attr="data-id=${ video.getId() }"></h2>
 	<table>
 		<tr>
 			<td colspan="2">
@@ -34,9 +34,9 @@
 				<div id="comment_div" class="ui blue segment">
 					<h3 class="ui header">Comments</h3>
 					<ul id="comment_list" class="ui selection list">
-						<li th:each="comment : ${video.getComments()}" th:attr="data-time=${comment.getPlaytime()}">
+						<li class="item" th:each="comment : ${video.getComments()}" th:attr="data-time=${comment.getPlaytime()}">
 							<p class="comment_header">
-								<span class="comment_playtime" th:text="${ comment.playtimeInfo() }"></span>
+								<span class="comment_playtime" th:text="'[' + ${ comment.playtimeInfo() } + ']'"></span>
 								<span class="commenter" th:text="${ comment.getCommenter().getName() }"></span>
 							</p>
 							<p class="comment_content" th:text="${ comment.getContent() }"></p>
@@ -50,14 +50,16 @@
 				</div>
 			</td>
 		</tr>
+		<tr><td></td></tr>
 		<tr>
 			<td th:if="null != ${ assessment } and ${ assessment.canComment() }">
+				<h4 class="ui header">Comment</h4>
 				<textarea id="comment"></textarea>
 			</td>
-			<td th:if="null != ${ assessment } and ${ assessment.canComment() }">
-				<button class="ui blue button" id="comment_button" disabled="disabled">Submit</button>
+			<td id="comment_button_td" th:if="null != ${ assessment } and ${ assessment.canComment() }">
+				<button class="ui blue button" id="comment_button" disabled="disabled">Comment</button>
 			</td>
-			<td>
+			<td id="grade_td">
 				<form class="ui form" th:if="null != ${ assessment } and ${ assessment.canGrade() }">
 					<div class="field">
 						<label>Grade</label>

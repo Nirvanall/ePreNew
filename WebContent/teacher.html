@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<base th:replace="template :: base" />
+<title>ePre Student Page</title>
+
+<link rel="stylesheet" type="text/css" href="css/lib/semantic.min.css" />
+<link rel="stylesheet" type="text/css" href="css/page.css" />
+
+<script type="text/javascript" src="javascript/lib/jquery.js"></script>
+<script type="text/javascript" src="javascript/lib/jquery.form.js"></script>
+<script type="text/javascript" src="javascript/lib/semantic.js"></script>
+<script type="text/javascript" src="javascript/table.js"></script>
+</head>
+
+<body>
+<article class="ui container page">
+	<section th:replace="template :: header"></section>
+	<div class="ui divider"></div>
+
+	<section id="page_content">
+		<h2 class="ui header">The Videos You Can Assess</h2>
+		<table class="ui unstackable table">
+			<thead>
+				<tr>
+					<th>Semester
+						
+					</th>
+					<th>Department
+						<i class="ui search icon link"></i>
+						<div class="ui popup">
+							<div data-content="department" class="ui icon input">
+								<input type="text" placeholder="Search department" />
+								<i class="inverted circular search link icon"></i>
+							</div>
+						</div>
+					</th>
+					<th>Presentation
+						<i class="ui search icon link"></i>
+						<div class="ui popup">
+							<div data-content="presentation" class="ui icon input">
+								<input type="text" placeholder="Search presentation" />
+								<i class="inverted circular search link icon"></i>
+							</div>
+						</div>
+					</th>
+					<th>
+						<div>Student ID
+							<i class="ui search icon link"></i>
+							<div class="ui popup">
+								<div data-content="student_id" class="ui icon input">
+									<input type="text" placeholder="Search presentation" />
+									<i class="inverted circular search link icon"></i>
+								</div>
+							</div>
+						</div>
+						<div>Student Name
+							<i class="ui search icon link"></i>
+							<div class="ui popup">
+								<div data-content="student_name" class="ui icon input">
+									<input type="text" placeholder="Search presentation" />
+									<i class="inverted circular search link icon"></i>
+								</div>
+							</div>
+						</div>
+					</th>
+					<th>Name
+						<i class="ui search icon link"></i>
+						<div class="ui popup">
+							<div data-content="name" class="ui icon input">
+								<input type="text" placeholder="Search name" />
+								<i class="inverted circular search link icon"></i>
+							</div>
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="video : ${videos}">
+					<td><a th:href="'video/view.do?id=' + ${ video.getId() }" th:text="${ video.getPresentation().infoSemesterFull() }"></a></td>
+					<td><a th:href="'video/view.do?id=' + ${ video.getId() }" th:text="${ video.getPresentation().getDepartment().getAbbreviation() }"></a></td>
+					<td><a th:href="'video/view.do?id=' + ${ video.getId() }" th:text="${ video.getPresentation().getName() }"></a></td>
+					<td>
+						<div>
+							<a th:href="'video/view.do?id=' + ${ video.getId() }" th:text="${ video.getOwner().getUserId() }"></a>
+						</div>
+						<div>
+							<a th:href="'video/view.do?id=' + ${ video.getId() }" th:text="${ video.getOwner().getName() }"></a>
+						</div>
+					</td>
+					<td><a th:href="'video/view.do?id=' + ${ video.getId() }" th:text="${ video.getName() }"></a></td>
+				</tr>
+				<tr th:if="${#lists.isEmpty(videos)}">
+					<td>You have no videos</td>
+				</tr>
+			</tbody>
+			<tfoot th:unless="${#lists.isEmpty(videos)}">
+				<tr th:replace="template :: pagination"></tr>
+			</tfoot>
+		</table>
+	</section>
+	
+	<div th:replace="template :: footer"></div>
+</article>
+</body>
+</html>

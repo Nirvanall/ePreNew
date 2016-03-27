@@ -1,14 +1,14 @@
 /**
  * 
  */
-var $highlighted;
-var handlingClicking = false;
-var videoPlayer = document.getElementById("video_player");
-var $commentList = $("ul#comment_list");
-var $commentInput = $("textarea#comment");
-var $commentButton = $("#comment_button");
-
 $(document).ready(function () {
+	var $highlighted;
+	var handlingClicking = false;
+	var videoPlayer = document.getElementById("video_player");
+	var $commentList = $("#comment_list");
+	var $commentInput = $("#comment");
+	var $commentButton = $("#comment_button");
+
 	$("#video_player").on("timeupdate", function () {
 		if (handlingClicking) return;
 		var playTime = this.currentTime;
@@ -45,7 +45,7 @@ $(document).ready(function () {
 		
 		// Delete the comment
 		$.ajax({
-			url: "comment/delete",
+			url: "comment/delete.do",
 			method: "POST",
 			data: {id: commentId},
 			dataType: "json",
@@ -65,7 +65,7 @@ $(document).ready(function () {
 		var $this = $(this), $p = $this.parent(), $li = $p.parent();
 		var commentId = $p.data("id");
 		$.ajax({
-			url: "comment/delete",
+			url: "comment/delete.do",
 			method: "POST",
 			data: {id: commentId},
 			dataType: "json",
@@ -92,7 +92,7 @@ $(document).ready(function () {
 	});
 	$commentButton.click(function () {
 		$.ajax({
-			url: "comment/create",
+			url: "comment/create.do",
 			method: "POST",
 			data: {
 				video_id: $("#video_title").data("id"),
