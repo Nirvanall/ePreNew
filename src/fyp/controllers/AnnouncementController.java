@@ -33,8 +33,8 @@ public class AnnouncementController {
 	
 	/**
 	 * System announcement creation/edition page
-	 * @param  Integer id       Edit: The id of the announcement to be edited
-	 *                          Create: NULL
+	 * @param  Integer id	   Edit: The id of the announcement to be edited
+	 *						  Create: NULL
 	 * @param  HttpSession httpSession
 	 * @param  Model model
 	 * @return String
@@ -64,9 +64,9 @@ public class AnnouncementController {
 	
 	/**
 	 * Create/edit a system announcement
-	 * @param  Integer id       Edit: The id of the announcement to be edited
-	 *                          Create: NULL
-	 * @param  String title     The title of the announcement
+	 * @param  Integer id	   Edit: The id of the announcement to be edited
+	 *						  Create: NULL
+	 * @param  String title	 The title of the announcement
 	 * @param  String content   The content of the announcement
 	 * @param  HttpSession httpSession
 	 * @param  Model model
