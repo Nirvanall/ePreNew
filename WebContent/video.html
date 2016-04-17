@@ -33,8 +33,8 @@
 			<td>
 				<div id="comment_div" class="ui blue segment">
 					<h3 class="ui header">Comments</h3>
-					<ul id="comment_list" class="ui selection list">
-						<li class="item" th:each="comment : ${video.getComments()}" th:attr="data-time=${comment.getPlaytime()}">
+					<div id="comment_list" class="ui selection list">
+						<div class="item" th:each="comment : ${video.getComments()}" th:attr="data-time=${comment.getPlaytime()}">
 							<p class="comment_header">
 								<span class="comment_playtime" th:text="'[' + ${ comment.playtimeInfo() } + ']'"></span>
 								<span class="commenter" th:text="${ comment.getCommenter().getName() }"></span>
@@ -45,8 +45,8 @@
 								<a href="javascript:void(0);" class="comment_edit">Edit</a>
 								<a href="javascript:void(0);" class="comment_delete">Delete</a>
 							</p>
-						</li>
-					</ul>
+						</div>
+					</div>
 				</div>
 			</td>
 		</tr>

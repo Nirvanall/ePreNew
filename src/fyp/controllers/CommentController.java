@@ -1,11 +1,14 @@
 package fyp.controllers;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +30,7 @@ public class CommentController {
 		this.sessionFactory = sessionFactory;
 	}
 	
-	@RequestMapping(value = "/create.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/create.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonResponse createAction(
 			@RequestParam(value = "video_id") Integer videoId,
 			@RequestParam(value = "playtime") Float playtime,
@@ -58,10 +61,15 @@ public class CommentController {
 		c.setContent(content);
 		session.saveOrUpdate(c);
 		
-		return new JsonResponse();
+		HashMap<String, Object> userMap = new HashMap<String, Object>();
+		userMap.put("name", user.getName());
+		HashMap<String, Object> commentMap = new HashMap<String, Object>();
+		commentMap.put("id", c.getId());
+		commentMap.put("commenter", userMap);
+		return new JsonResponse(commentMap);
 	}
 	
-	@RequestMapping(value = "/update.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/update.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonResponse updateAction(
 			@RequestParam(value = "id") Integer commentId,
 			@RequestParam(value = "content") String content,
@@ -85,7 +93,7 @@ public class CommentController {
 		return new JsonResponse();
 	}
 	
-	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonResponse deleteAction(
 			@RequestParam(value = "id") Integer commentId,
 			HttpSession httpSession

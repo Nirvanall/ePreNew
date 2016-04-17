@@ -12,7 +12,7 @@ $(document).ready(function () {
 	$("#video_player").on("timeupdate", function () {
 		if (handlingClicking) return;
 		var playTime = this.currentTime;
-		for (var $li = $commentList.find("li").last();
+		for (var $li = $commentList.find("div.item").last();
 				1 == $li.length; $li = $li.prev()) {
 			if ($li.data("time") <= playTime) {
 				if ($highlighted) $highlighted.removeClass("highlighted");
@@ -22,7 +22,7 @@ $(document).ready(function () {
 			}
 		}
 	});
-	$commentList.find("li").click(function () {
+	$commentList.find("div.item").click(function () {
 		var $this = $(this);
 		handlingClicking = true;
 		videoPlayer.currentTime = $this.data("time");
@@ -47,7 +47,10 @@ $(document).ready(function () {
 		$.ajax({
 			url: "comment/delete.do",
 			method: "POST",
-			data: {id: commentId},
+			data: {
+				id: commentId,
+				format: 'json'
+			},
 			dataType: "json",
 			success: function (json) {
 				if (typeof(json.code) == "number" && 0 == json.code) {
@@ -67,7 +70,10 @@ $(document).ready(function () {
 		$.ajax({
 			url: "comment/delete.do",
 			method: "POST",
-			data: {id: commentId},
+			data: {
+				id: commentId,
+				format: 'json'
+			},
 			dataType: "json",
 			success: function (json) {
 				if (typeof(json.code) == "number" && 0 == json.code) {
@@ -90,7 +96,44 @@ $(document).ready(function () {
 			$commentButton.removeAttr("disabled");
 		}
 	});
+	
+	var formatPlaytime = function (playtime) {
+		var min = Math.floor(playtime / 60);
+		var sec = Math.floor(playtime - 60 * min);
+		return (min < 10 ? '0' : '') + min + ':' + (sec < 10 ? '0' : '') + sec;
+	}
+	var currentComment;
+	var addCommentIntoList = function () {
+		if (!currentComment) return false;
+		var playtime = formatPlaytime(currentComment.playtime);
+		var $liNew = $(
+				'<div class="item" data-time="' + currentComment.playtime + '">\n' +
+					'<p class="comment_header">\n' +
+						'<span class="comment_playtime">[' + playtime + ']</span>\n' +
+						'<span class="commenter">' + currentComment.commenter.name + '</span>\n' +
+					'</p>\n' +
+					'<p class="comment_content">' + currentComment.content + '</p>\n' +
+					'<p class="comment_operation" data-id="' + currentComment.id + '">\n' +
+						'<a href="javascript:void(0);" class="comment_edit">Edit</a>\n' +
+						'<a href="javascript:void(0);" class="comment_delete">Delete</a>\n' +
+					'</p>\n' +
+				'</div>');
+		for (var $li = $commentList.find("div.item").first();
+				1 == $li.length; $li = $li.next()) {
+			if ($li.data("time") > currentComment.playtime) {
+				$liNew.insertBefore($li);
+				break;
+			}
+		}
+		if (1 != $li.length) $commentList.append($liNew);
+		if ($highlighted) $highlighted.removeClass("highlighted");
+		$highlighted = $liNew.addClass("highlighted");
+	}
 	$commentButton.click(function () {
+		currentComment = {
+			playtime: videoPlayer.currentTime,
+			content: $commentInput.val()
+		};
 		$.ajax({
 			url: "comment/create.do",
 			method: "POST",
@@ -102,7 +145,10 @@ $(document).ready(function () {
 			dataType: "json",
 			success: function (json) {
 				if (typeof(json.code) == "number" && 0 == json.code) {
-					// TODO: insert an item in $commentList
+					currentComment.id = json.data.id;
+					currentComment.commenter = {name: json.data.commenter.name};
+					addCommentIntoList();
+					$commentInput.val('');
 				} else {
 					alert("Fail to make the comment");
 				}
