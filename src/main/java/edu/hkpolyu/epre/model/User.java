@@ -1,4 +1,4 @@
-package fyp.models;
+package edu.hkpolyu.epre.model;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

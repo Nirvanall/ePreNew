@@ -1,4 +1,4 @@
-package fyp.models;
+package edu.hkpolyu.epre.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

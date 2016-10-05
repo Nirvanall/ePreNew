@@ -1,13 +1,10 @@
-package fyp.models;
+package edu.hkpolyu.epre.model;
 
 import java.io.Serializable;
 import java.sql.Date;
 import java.text.DateFormat;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
@@ -15,27 +12,15 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
 @MappedSuperclass
-public abstract class IdStatusTimeModel implements Serializable {
+public abstract class StatusTimeModel implements Serializable {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Integer id;
-	
-	public Integer getId(){
-		return id;
-	}
-	
-	public void setId(Integer id){
-		this.id = id;
-	}
-	
 	public static final Byte STATUS_NORMAL = 0,
-			STATUS_DELETED = 1, STATUS_UPLOADING = 2;
+			STATUS_DELETED = 1;
 	
 	@Column(nullable = false)
-	protected Byte status = STATUS_NORMAL;
+	protected Byte status;
 	
 	public Byte getStatus() {
 		return status;

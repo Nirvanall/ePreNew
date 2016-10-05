@@ -1,4 +1,4 @@
-package fyp;
+package edu.hkpolyu.epre.response;
 
 import java.util.Date;
 
