@@ -18,6 +18,15 @@ apt-get update
 apt-get -y install apt-fast
 curl -sSL https://git.daocloud.io/docker | sed 's/apt-get install/apt-fast install/g' | sh
 
+[ -d $BASEDIR/jdk ] || mkdir $BASEDIR/jdk -p
+echo '#!/bin/bash
+while ;
+    sleep 1
+endw' > $BASEDIR/jdk/sleep.sh
+apt-fast install -y zip
+curl -o $BASEDIR/jdk/gradle-3.1-bin.zip https://services.gradle.org/distributions/gradle-3.1-bin.zip
+unzip $BASEDIR/jdk/gradle-3.1-bin.zip
+
 [ -d $BASEDIR/conf/redis ] || mkdir $BASEDIR/conf/redis -p
 [ -e $BASEDIR/conf/redis/redis.conf ] || curl -o $BASEDIR/conf/redis/redis.conf https://raw.githubusercontent.com/antirez/redis/3.2/redis.conf
 
@@ -57,6 +66,7 @@ docker run --name $JDK \
 -w /data/web \
 -e $SETXTERM \
 -e $TIMEZONE \
+-e GRADLE_HOME=/home/gradle-3.1-bin \
 -d daocloud.io/library/openjdk:8-jdk
 
 docker run --name $NGINX \
