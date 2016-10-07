@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import fyp.models.User;
-import fyp.models.Video;
+import edu.hkpolyu.epre.model.User;
+import edu.hkpolyu.epre.model.Video;
 
 /**
  * Student Page

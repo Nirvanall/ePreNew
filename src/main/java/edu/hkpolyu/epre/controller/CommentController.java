@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import fyp.JsonResponse;
-import fyp.models.Assessment;
-import fyp.models.Comment;
-import fyp.models.StatusTimeModel;
-import fyp.models.User;
-import fyp.models.Video;
+import edu.hkpolyu.common.response.JsonResponse;
+import edu.hkpolyu.epre.model.Assessment;
+import edu.hkpolyu.epre.model.Comment;
+import edu.hkpolyu.epre.model.User;
+import edu.hkpolyu.epre.model.Video;
 
 @RestController
 @RequestMapping("/comment")
@@ -38,21 +37,21 @@ public class CommentController {
 			HttpSession httpSession
 	) {
 		User user = (User)httpSession.getAttribute("user");
-		if (null == user) return JsonResponse.getFailLoginInstance(null);
+		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery("FROM Video v WHERE v.id = :videoId AND v.status = 0");
 		query.setInteger("videoId", videoId);
 		Video v = (Video)query.uniqueResult();
 		if (null == v)
-			return JsonResponse.getFailNotFoundInstance(null, Video.class);
+			return JsonResponse.getVideoNotFoundInstance(null);
 		
 		query = session.createQuery("FROM Assessment a " +
 				"WHERE a.video.id = :videoId AND a.viewer.id = :userId AND a.status = 0");
 		query.setInteger("videoId", videoId).setInteger("userId", user.getId());
 		Assessment a = (Assessment)query.uniqueResult();
 		if (null == a || !a.canComment())
-			return JsonResponse.getFailPermissionInstance(null);
+			return JsonResponse.getNoPermissionInstance("You do not have the permission to comment this video");
 			
 		Comment c = new Comment();
 		c.setCommenter(user);
@@ -76,16 +75,16 @@ public class CommentController {
 			HttpSession httpSession
 	) {
 		User user = (User)httpSession.getAttribute("user");
-		if (null == user) return JsonResponse.getFailLoginInstance(null);
+		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery("FROM Comment WHERE id = :commentId AND status = 0");
 		query.setInteger("commentId", commentId);
 		Comment c = (Comment)query.uniqueResult();
 		if (null == c)
-			return JsonResponse.getFailNotFoundInstance(null, Comment.class);
+			return JsonResponse.getCommentNotFoundInstance(null);
 		if (c.getCommenter().getId() != user.getId())
-			return JsonResponse.getFailNotOwnInstance(null, Comment.class);
+			return JsonResponse.getNoPermissionInstance("You cannot edit the comment that is not yours");
 		
 		c.setContent(content);
 		session.saveOrUpdate(c);
@@ -99,19 +98,19 @@ public class CommentController {
 			HttpSession httpSession
 	) {
 		User user = (User)httpSession.getAttribute("user");
-		if (null == user) return JsonResponse.getFailLoginInstance(null);
+		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery("FROM Comment WHERE id = :commentId");
 		query.setInteger("commentId", commentId);
 		Comment c = (Comment)query.uniqueResult();
 		if (null == c)
-			return JsonResponse.getFailNotFoundInstance(null, Comment.class);
+			return JsonResponse.getCommentNotFoundInstance(null);
 		if (c.getCommenter().getId() != user.getId())
-			return JsonResponse.getFailNotOwnInstance(null, Comment.class);
+			return JsonResponse.getNoPermissionInstance("You cannot delete the comment that is not yours");
 		
-		if (c.getStatus() != StatusTimeModel.STATUS_DELETED) {
-			c.setStatus(StatusTimeModel.STATUS_DELETED);
+		if (!c.isStatusDeleted()) {
+			c.statusDeleted();
 			session.saveOrUpdate(c);
 		}
 		

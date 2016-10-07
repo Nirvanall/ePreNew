@@ -7,27 +7,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name = "Reponses")
 @DynamicUpdate
-public class Response extends IdStatusTimeModel {
+public class Response extends UserIdModel {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "department_id", nullable = false)
-	private User user;
-	
-	public User getUser() {
-		return user;
-	}
-	
-	public void setUser(User user) {
-		this.user = user;
-	}
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "comment_id", nullable = false)

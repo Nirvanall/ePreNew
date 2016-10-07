@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fyp.JsonResponse;
-import fyp.models.Message;
-import fyp.models.User;
+import edu.hkpolyu.common.response.JsonResponse;
+import edu.hkpolyu.epre.model.Message;
+import edu.hkpolyu.epre.model.User;
 
 /**
  * System announcement (toUser IS NULL (to_user_id IS NULL))
@@ -82,7 +82,7 @@ public class AnnouncementController {
 	) {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user || !user.isAdmin()) {
-			return JsonResponse.getFailLoginInstance(null);
+			return JsonResponse.getNeedLoginInstance(null);
 		}
 		
 		Session session = sessionFactory.openSession();
@@ -98,10 +98,10 @@ public class AnnouncementController {
 			query.setInteger("id", id);
 			announcement = (Message)query.uniqueResult();
 			if (null == announcement) {
-				return JsonResponse.getFailNotFoundInstance(null, Message.class);
+				return JsonResponse.getMessageNotFoundInstance(null);
 			}
 			if (announcement.getToUser() != null) {
-				return JsonResponse.getFailInstance(
+				return JsonResponse.getMessageNotFoundInstance(
 						"The message of the requested id is not an annoucement");
 			}
 			announcement.setTitle(title);

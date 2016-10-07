@@ -6,11 +6,12 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
+import edu.hkpolyu.common.model.IdModel;
 
 @Entity
 @Table(name = "Departments")
 @DynamicUpdate
-public class Department extends IdStatusTimeModel implements Comparable<Department> {
+public class Department extends IdModel implements Comparable<Department> {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	

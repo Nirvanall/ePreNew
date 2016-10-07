@@ -9,11 +9,12 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
+import edu.hkpolyu.common.model.IdModel;
 
 @Entity
-@Table(name = "Messages")
+@Table(name = "t_message")
 @DynamicUpdate
-public class Message extends IdStatusTimeModel implements Comparable<Message> {
+public class Message extends IdModel implements Comparable<Message> {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	
@@ -57,6 +58,6 @@ public class Message extends IdStatusTimeModel implements Comparable<Message> {
 	
 	
 	public int compareTo(Message message) {
-		return -(createTime.compareTo(message.createTime));
+		return -(this.getCreateTime().compareTo(message.getCreateTime()));
 	}
 }

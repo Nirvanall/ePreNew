@@ -2,9 +2,9 @@
 # This script requires root priviledge
 
 NGINX=nginx-epre
-MYSQL=mysql-youcai
-REDIS=redis-youcai
-JDK=jdk-youcai
+MYSQL=mysql-epre
+REDIS=redis-epre
+JDK=jdk-epre
 
 TIMEZONE='TZ=Asia/Shanghai'
 SETXTERM='TERM=xterm'
@@ -20,15 +20,19 @@ curl -sSL https://git.daocloud.io/docker | sed 's/apt-get install/apt-fast insta
 
 [ -d $BASEDIR/jdk ] || mkdir $BASEDIR/jdk -p
 echo '#!/bin/bash
-while ;
+while :
+do
     sleep 1
-endw' > $BASEDIR/jdk/sleep.sh
+done' > $BASEDIR/jdk/sleep.sh
+chmod a+x $BASEDIR/jdk/sleep.sh
+
 apt-fast install -y zip
 curl -o $BASEDIR/jdk/gradle-3.1-bin.zip https://services.gradle.org/distributions/gradle-3.1-bin.zip
 unzip $BASEDIR/jdk/gradle-3.1-bin.zip
 
 [ -d $BASEDIR/conf/redis ] || mkdir $BASEDIR/conf/redis -p
 [ -e $BASEDIR/conf/redis/redis.conf ] || curl -o $BASEDIR/conf/redis/redis.conf https://raw.githubusercontent.com/antirez/redis/3.2/redis.conf
+sed -i '/^bind / s/b/# b/;/ requirepass/ a\requirepass R00T@root!' $BASEDIR/conf/redis/redis.conf
 
 docker rm -fv $NGINX $JDK $MYSQL $REDIS || echo ''
 
@@ -66,8 +70,8 @@ docker run --name $JDK \
 -w /data/web \
 -e $SETXTERM \
 -e $TIMEZONE \
--e GRADLE_HOME=/home/gradle-3.1-bin \
--d daocloud.io/library/openjdk:8-jdk
+-e GRADLE_HOME=/home/gradle-3.1 \
+-d index.daocloud.io/library/openjdk:8-jdk /home/sleep.sh
 
 docker run --name $NGINX \
 --link=$JDK:jdk \

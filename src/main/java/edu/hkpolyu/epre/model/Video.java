@@ -15,15 +15,16 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
+import edu.hkpolyu.common.model.IdModel;
 
 @Entity
 @Table(name = "Videos")
 @DynamicUpdate
-public class Video extends IdStatusTimeModel implements Comparable<Video> {
+public class Video extends IdModel implements Comparable<Video> {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	
-	/*
+    @Column(name="presentation_id")
 	private Integer presentationId;
 	
 	public Integer getPresentationId(){
@@ -33,7 +34,7 @@ public class Video extends IdStatusTimeModel implements Comparable<Video> {
 	public void setPresentationId(Integer presentationId){
 		this.presentationId = presentationId;
 	}
-	*/
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "presentation_id", nullable = false)
 	private Presentation presentation;
@@ -47,7 +48,6 @@ public class Video extends IdStatusTimeModel implements Comparable<Video> {
 	}
 	
 	
-	/*
 	private Integer userId;
 	
 	public Integer getUserId(){
@@ -57,7 +57,7 @@ public class Video extends IdStatusTimeModel implements Comparable<Video> {
 	public void setUserId(Integer userId){
 		this.userId = userId;
 	}
-	*/
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User owner;
@@ -112,7 +112,7 @@ public class Video extends IdStatusTimeModel implements Comparable<Video> {
 		result = owner.compareTo(video.owner);
 		if (0 != result) return result;
 		
-		return -(createTime.compareTo(video.createTime));
+		return -(this.getCreateTime().compareTo(video.getCreateTime()));
 	}
 
 

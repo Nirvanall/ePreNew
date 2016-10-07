@@ -1,35 +1,44 @@
 package edu.hkpolyu.epre.model;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
+import edu.hkpolyu.common.model.IdModel;
 
 @Entity
-@Table(name = "Accounts")
+@Table(name = "t_user")
 @DynamicUpdate
-public class User extends IdStatusTimeModel implements Comparable<User> {
+public class User extends IdModel implements Comparable<User> {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name = "user_id", length = 20, nullable = false, unique = true)
-	private String userId;
+	@Column(name = "user_name", length = 20, nullable = false, unique = true)
+	private String userName;
 	
-	public String getUserId(){
-		return userId;
+	public String getUserName(){
+		return userName;
 	}
 	
-	public void setUserId(String userId){
-		this.userId = userId;
+	public void setUserName(String userName){
+		this.userName = userName;
+	}
+	
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+	private UserPassword password;
+	
+	public UserPassword getPassword(){
+		return password;
+	}
+	
+	public void setPassword(UserPassword password){
+		this.password = password;
 	}
 	
 	@Column(length = 64, nullable = false)
@@ -43,51 +52,6 @@ public class User extends IdStatusTimeModel implements Comparable<User> {
 		this.name = name;
 	}
 	
-	@Column(length = 64, nullable = false)
-	private String password;
-	
-	public String getPassword(){
-		return password;
-	}
-	
-	public void setPassword(String password){
-		this.password = password;
-	}
-	
-	public static final String HEX_DIGITS = "0123456789abcdef";
-	
-	public static String sha256(String password){
-		MessageDigest md = null;
-		StringBuffer str = new StringBuffer();
-		try {
-			md = MessageDigest.getInstance("SHA-256");
-			byte[] result = md.digest(password.getBytes()); 
-			for(byte b : result){
-				str.append(HEX_DIGITS.charAt((b >> 4) & 0xF));
-				str.append(HEX_DIGITS.charAt(b & 0xF));
-			}
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		return str.toString();
-	}
-	
-	public static String decryptAES128(String code, String key){
-		String result = null;
-		try {
-			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-			SecretKeySpec secretKey = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
-			cipher.init(Cipher.DECRYPT_MODE, secretKey);
-			byte[] output = cipher.doFinal(code.getBytes("UTF-8"));
-			result = new String(output, "UTF-8");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-	
-	/*
 	private Byte departmentId;
 	
 	public Byte getDepartmentId(){
@@ -96,7 +60,7 @@ public class User extends IdStatusTimeModel implements Comparable<User> {
 	public void setDepartmentId(Byte departmentId){
 		this.departmentId = departmentId;
 	}
-	*/
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "department_id", nullable = false)
 	private Department department;

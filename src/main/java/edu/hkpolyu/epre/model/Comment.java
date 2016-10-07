@@ -14,11 +14,12 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
+import edu.hkpolyu.common.model.IdModel;
 
 @Entity
 @Table(name = "Comments")
 @DynamicUpdate
-public class Comment extends IdStatusTimeModel implements Comparable<Comment> {
+public class Comment extends IdModel implements Comparable<Comment> {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	
@@ -99,6 +100,6 @@ public class Comment extends IdStatusTimeModel implements Comparable<Comment> {
 		result = playtime.compareTo(comment.playtime);
 		if (0 != result) return result;
 		
-		return -(createTime.compareTo(comment.createTime));
+		return -(this.getCreateTime().compareTo(comment.getCreateTime()));
 	}
 }

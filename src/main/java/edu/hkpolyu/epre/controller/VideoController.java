@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import fyp.JsonResponse;
-import fyp.models.Assessment;
-import fyp.models.Presentation;
-import fyp.models.StatusTimeModel;
-import fyp.models.User;
-import fyp.models.Video;
+import edu.hkpolyu.common.response.JsonResponse;
+import edu.hkpolyu.epre.model.Assessment;
+import edu.hkpolyu.epre.model.Presentation;
+import edu.hkpolyu.epre.model.User;
+import edu.hkpolyu.epre.model.Video;
 
 @Controller
 @RequestMapping("/video")
@@ -75,21 +74,21 @@ public class VideoController {
 			HttpSession httpSession
 	) {
 		User user = (User)httpSession.getAttribute("user");
-		if (null == user) return JsonResponse.getFailLoginInstance(null);
+		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery("FROM Presentation WHERE id = :presentationId AND status = 0");
 		query.setInteger("presentationId", presentationId);
 		Presentation p = (Presentation)query.uniqueResult();
 		if (null == p) {
-			return JsonResponse.getFailNotFoundInstance(null, Presentation.class);
+			return JsonResponse.getPresentationNotFoundInstance(null);
 		}
 		
 		query = session.createQuery("FROM User WHERE userId = :userId AND status = 0");
 		query.setString("userId", userId);
 		User u = (User)query.uniqueResult();
 		if (null == u) {
-			return JsonResponse.getFailNotFoundInstance(null, User.class);
+			return JsonResponse.getUserNotFoundInstance(null);
 		}
 		
 		Video v = new Video();
@@ -108,7 +107,7 @@ public class VideoController {
 			HttpSession httpSession
 	) {
 		User user = (User)httpSession.getAttribute("user");
-		if (null == user) return JsonResponse.getFailLoginInstance(null);
+		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
 		Session session = sessionFactory.openSession();
 		
@@ -124,14 +123,14 @@ public class VideoController {
 			HttpSession httpSession
 	) {
 		User user = (User)httpSession.getAttribute("user");
-		if (null == user) return JsonResponse.getFailLoginInstance(null);
+		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery("FROM Video WHERE id = :videoId AND status = 0");
 		query.setInteger("videoId", videoId);
 		Video v = (Video)query.uniqueResult();
 		if (null == v)
-			return JsonResponse.getFailNotFoundInstance(null, Video.class);
+			return JsonResponse.getVideoNotFoundInstance(null);
 		
 		if (null != userId && userId.length() > 0) {
 			query = session.createQuery("FROM User WHERE userId = :userId AND status = 0");
@@ -151,17 +150,16 @@ public class VideoController {
 			HttpSession httpSession
 	) {
 		User user = (User)httpSession.getAttribute("user");
-		if (null == user) return JsonResponse.getFailLoginInstance(null);
+		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery("FROM Video WHERE id = :videoId AND status = 0");
 		query.setInteger("videoId", videoId);
 		Video v = (Video)query.uniqueResult();
 		if (null == v)
-			return JsonResponse.getFailNotFoundInstance(null, Video.class);
+			return JsonResponse.getVideoNotFoundInstance(null);
 		
-		v.setStatus(StatusTimeModel.STATUS_DELETED);
-		// TODO: delete associated assessments, comments and responses
+		v.statusDeleted();
 		session.saveOrUpdate(v);
 		
 		return new JsonResponse();

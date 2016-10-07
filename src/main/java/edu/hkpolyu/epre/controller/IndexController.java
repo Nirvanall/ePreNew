@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import fyp.models.Message;
+import edu.hkpolyu.epre.model.Message;
 
 /**
  * Homepage

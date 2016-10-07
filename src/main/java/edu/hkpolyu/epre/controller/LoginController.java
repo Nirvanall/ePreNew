@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fyp.JsonResponse;
-import fyp.models.User;
+import edu.hkpolyu.common.response.JsonResponse;
+import edu.hkpolyu.epre.model.User;
 
 @Controller
 public class LoginController {
@@ -77,13 +77,13 @@ public class LoginController {
 			Model model
 	) {
 		User user = (User)httpSession.getAttribute("user");
-		if (null == user) return JsonResponse.getFailLoginInstance(null);
+		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery("FROM User WHERE id=:id AND password=sha2(:password, 256)");
 		query.setInteger("id", user.getId()).setString("password", oldPassword);
 		user = (User)query.uniqueResult();
-		if (null == user) return JsonResponse.getFailPasswordInstance(null);
+		if (null == user) return JsonResponse.getWrongPasswordInstance(null);
 		
 		user.setPassword(User.sha256(newPassword));
 		session.update(user);

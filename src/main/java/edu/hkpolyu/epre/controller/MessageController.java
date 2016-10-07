@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fyp.JsonResponse;
-import fyp.models.Message;
-import fyp.models.User;
+import edu.hkpolyu.common.response.JsonResponse;
+import edu.hkpolyu.epre.model.Message;
+import edu.hkpolyu.epre.model.User;
 
 /**
  * System announcement (toUser IS NULL (to_user_id IS NULL))
@@ -65,7 +65,7 @@ public class MessageController {
 			Model model
 	) {
 		User user = (User)httpSession.getAttribute("user");
-		if (null == user) return JsonResponse.getFailLoginInstance(null);
+		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
 		Session session = sessionFactory.openSession();
 		Message message = null;
@@ -81,16 +81,16 @@ public class MessageController {
 			query.setInteger("id", id);
 			message = (Message)query.uniqueResult();
 			if (null == message) {
-				return JsonResponse.getFailNotFoundInstance(null, Message.class);
+				return JsonResponse.getMessageNotFoundInstance(null);
 			}
 			if (message.getFromUser().getId() != user.getId()) {
-				return JsonResponse.getFailNotOwnInstance(null, Message.class);
+				return JsonResponse.getNoPermissionInstance("You cannot edit the message that is not sent by you");
 			}
 			query = session.createQuery("FROM User AS u WHERE u.userId = :userId");
 			query.setString("userId", toUserId);
 			User toUser = (User)query.uniqueResult();
 			if (null == toUser) {
-				return JsonResponse.getFailNotFoundInstance(null, User.class);
+				return JsonResponse.getUserNotFoundInstance(null);
 			}
 			message.setTitle(title);
 			message.setContent(content);
