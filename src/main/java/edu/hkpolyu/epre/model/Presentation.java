@@ -12,7 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import edu.hkpolyu.common.model.IdModel;
 
 @Entity
-@Table(name = "Presentations")
+@Table(name = "t_presentation")
 @DynamicUpdate
 public class Presentation extends IdModel implements Comparable<Presentation> {
 	@Transient

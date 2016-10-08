@@ -18,7 +18,7 @@ public class AdminController {
 	) {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user || !user.isAdmin()) return "redirect:index.do";
-		model.addAttribute("user_id", user.getUserId());
+		model.addAttribute("user_id", user.getUserName());
 		model.addAttribute("user_name", user.getName());
 		
 		return "admin";

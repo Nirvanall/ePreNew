@@ -38,7 +38,7 @@ public class VideoController {
 	) {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return "redirect:../index.do";
-		model.addAttribute("user_id", user.getUserId());
+		model.addAttribute("user_id", user.getUserName());
 		model.addAttribute("user_name", user.getName());
 		
 		Session session = sessionFactory.openSession();
@@ -68,7 +68,7 @@ public class VideoController {
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonResponse addAction(
 			@RequestParam(value = "presentation_id") Integer presentationId,
-			@RequestParam(value = "user_id") String userId,
+			@RequestParam(value = "user_id") String userName,
 			@RequestParam(value = "name") String name,
 			@RequestParam(value = "info") String info,
 			HttpSession httpSession
@@ -84,8 +84,8 @@ public class VideoController {
 			return JsonResponse.getPresentationNotFoundInstance(null);
 		}
 		
-		query = session.createQuery("FROM User WHERE userId = :userId AND status = 0");
-		query.setString("userId", userId);
+		query = session.createQuery("FROM User WHERE userName = :userName AND status = 0");
+		query.setString("userName", userName);
 		User u = (User)query.uniqueResult();
 		if (null == u) {
 			return JsonResponse.getUserNotFoundInstance(null);
@@ -133,7 +133,7 @@ public class VideoController {
 			return JsonResponse.getVideoNotFoundInstance(null);
 		
 		if (null != userId && userId.length() > 0) {
-			query = session.createQuery("FROM User WHERE userId = :userId AND status = 0");
+			query = session.createQuery("FROM User WHERE userName = :userId AND status = 0");
 			query.setString("userId", userId);
 			User u = (User)query.uniqueResult();
 			v.setOwner(u);

@@ -12,7 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import edu.hkpolyu.common.model.IdModel;
 
 @Entity
-@Table(name = "Assessments")
+@Table(name = "t_assessment")
 @DynamicUpdate
 public class Assessment extends IdModel {
 	@Transient

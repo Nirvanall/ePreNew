@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.hkpolyu.common.response.JsonResponse;
 import edu.hkpolyu.epre.model.User;
+import edu.hkpolyu.epre.model.UserPassword;
 
 @Controller
 public class LoginController {
@@ -62,7 +63,7 @@ public class LoginController {
 	) {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return "redirect:index.do";
-		model.addAttribute("user_id", user.getUserId());
+		model.addAttribute("user_id", user.getUserName());
 		model.addAttribute("user_name", user.getName());
 		return "password";
 	}
@@ -85,7 +86,7 @@ public class LoginController {
 		user = (User)query.uniqueResult();
 		if (null == user) return JsonResponse.getWrongPasswordInstance(null);
 		
-		user.setPassword(User.sha256(newPassword));
+		user.getPassword().setPassword(UserPassword.sha256(newPassword));
 		session.update(user);
 		httpSession.setAttribute("user", user);
 		

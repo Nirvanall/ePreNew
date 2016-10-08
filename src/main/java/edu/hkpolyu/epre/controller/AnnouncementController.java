@@ -47,7 +47,7 @@ public class AnnouncementController {
 	) {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user || !user.isAdmin()) return "redirect:index.do";
-		model.addAttribute("user_id", user.getUserId());
+		model.addAttribute("user_id", user.getUserName());
 		model.addAttribute("user_name", user.getName());
 		
 		if (null != id) {
@@ -121,7 +121,7 @@ public class AnnouncementController {
 	) {
 		User user = (User)httpSession.getAttribute("user");
 		if (null != user) {
-			model.addAttribute("user_id", user.getUserId());
+			model.addAttribute("user_id", user.getUserName());
 			model.addAttribute("user_name", user.getName());
 			model.addAttribute("isAdmin", user.isAdmin());
 		}

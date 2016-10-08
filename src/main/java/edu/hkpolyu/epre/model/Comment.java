@@ -17,7 +17,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import edu.hkpolyu.common.model.IdModel;
 
 @Entity
-@Table(name = "Comments")
+@Table(name = "t_comment")
 @DynamicUpdate
 public class Comment extends IdModel implements Comparable<Comment> {
 	@Transient

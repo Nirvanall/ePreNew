@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import javax.persistence.Id;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,6 +23,7 @@ public class UserPassword extends StatusModel {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	
+    @Id
 	@Column(name = "user_id")
 	protected Integer userId;
 	
@@ -43,7 +45,7 @@ public class UserPassword extends StatusModel {
 	}
 	
 	public void setUser(User user) {
-        this.setUserId(user.id);
+        this.setUserId(user.getId());
 		this.user = user;
 	}
 

@@ -32,13 +32,13 @@ CREATE TABLE IF NOT EXISTS `t_user` (
 	`status` TINYINT UNSIGNED NOT NULL DEFAULT 1,
 	`create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	`user_id` VARCHAR(20) NOT NULL,
+	`user_name` VARCHAR(20) NOT NULL,
 	`name` VARCHAR(64) NOT NULL,
 	`department_id` INT UNSIGNED NOT NULL,
 	`category` TINYINT NOT NULL COMMENT "0: admin; 1: student; 2: teacher; 3: outsider",
 	PRIMARY KEY (`id`),
-	UNIQUE KEY (`user_id`),
-	FOREIGN KEY (`department_id`) REFERENCES `Departments`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+	UNIQUE KEY (`user_name`),
+	FOREIGN KEY (`department_id`) REFERENCES `t_department`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `t_user_password` (
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `t_user_password` (
 	`update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	`password` CHAR(64) NOT NULL COMMENT "SHA-256 of a user's password",
 	PRIMARY KEY (`user_id`),
-	FOREIGN KEY (`user_id`) REFERENCES `t_user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (`user_id`) REFERENCES `t_user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `t_presentation` (
@@ -135,43 +135,48 @@ CREATE TABLE IF NOT EXISTS `t_message` (
 	FOREIGN KEY (`to_user_id`) REFERENCES `t_user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-INSERT INTO `Departments` (`abbreviation`, `name`) VALUES
-	("ABCT", "Applied Biology and Chemical Technology"),
-	("AF",   "Accounting and Finance"),
-	("AMA",  "Applied Mathematics"),
-	("AP",   "Applied Physics"),
-	("APSS", "Applied Social Sciences"),
-	("BME",  "Biomedical Engineering"),
-	("BRE",  "Building and Real Estate"),
-	("BSE",  "Building Services Engineering"),
-	("CBS",  "Chinese and Bilingual Studies"),
-	("CC",   "Chinese Culture"),
-	("CEE",  "Civil and Environmental Engineering"),
-	("COMP", "Computing"),
-	("EE",   "Electrical Engineering"),
-	("EIE",  "Electronic and Information Engineering"),
-	("ELC",  "English Language Centre"),
-	("ENGL", "English"),
-	("GEC",  "General Education Centre"),
-	("HTI",  "Health Technology and Informatics"),
-	("ISE",  "Industrial and Systems Engineering"),
-	("ITC",  "Textiles and Clothing"),
-	("LMS",  "Logistics and Maritime Studies"),
-	("LSGI", "Land Surveying and Geo-Informatics"),
-	("ME",   "Mechanical Engineering"),
-	("MM",   "Management and Marketing"),
-	("RS",   "Rehabilitation Sciences"),
-	("SD",   "School of Design"),
-	("SHTM", "Hotel and Tourism Management"),
-	("SN",   "School of Nursing"),
-	("SO",   "School of Optometry");
+INSERT INTO `t_department` (`id`, `abbreviation`, `name`) VALUES
+	(1, "ABCT", "Applied Biology and Chemical Technology"),
+	(2, "AF",   "Accounting and Finance"),
+	(3, "AMA",  "Applied Mathematics"),
+	(4, "AP",   "Applied Physics"),
+	(5, "APSS", "Applied Social Sciences"),
+	(6, "BME",  "Biomedical Engineering"),
+	(7, "BRE",  "Building and Real Estate"),
+	(8, "BSE",  "Building Services Engineering"),
+	(9, "CBS",  "Chinese and Bilingual Studies"),
+	(10, "CC",   "Chinese Culture"),
+	(11, "CEE",  "Civil and Environmental Engineering"),
+	(12, "COMP", "Computing"),
+	(13, "EE",   "Electrical Engineering"),
+	(14, "EIE",  "Electronic and Information Engineering"),
+	(15, "ELC",  "English Language Centre"),
+	(16, "ENGL", "English"),
+	(17, "GEC",  "General Education Centre"),
+	(18, "HTI",  "Health Technology and Informatics"),
+	(19, "ISE",  "Industrial and Systems Engineering"),
+	(20, "ITC",  "Textiles and Clothing"),
+	(21, "LMS",  "Logistics and Maritime Studies"),
+	(22, "LSGI", "Land Surveying and Geo-Informatics"),
+	(23, "ME",   "Mechanical Engineering"),
+	(24, "MM",   "Management and Marketing"),
+	(25, "RS",   "Rehabilitation Sciences"),
+	(26, "SD",   "School of Design"),
+	(27, "SHTM", "Hotel and Tourism Management"),
+	(28, "SN",   "School of Nursing"),
+	(29, "SO",   "School of Optometry");
 
-INSERT INTO `Accounts` (`user_id`, `name`, `password`, `department_id`, `category`) VALUES
-	("admin", "Administrator", sha2("FYPfyp", 256), 14, 0),
-	("13116487d", "Wu Yuping", sha2("13116487d", 256), 14, 1),
-	("enchikin", "Dr. Leung Chi-Kin", sha2("enchikin", 256), 14, 2);
+INSERT INTO `t_user` (`id`, `user_name`, `name`, `department_id`, `category`) VALUES
+	(1, "admin", "Administrator", 14, 0),
+	(2, "13116487d", "Wu Yuping", 14, 1),
+	(3, "enchikin", "Dr. Leung Chi-Kin", 14, 2);
 
-INSERT INTO `Messages` (`from_user_id`, `title`, `content`) VALUES
+INSERT INTO `t_user_password` (`user_id`, `password`) VALUES
+	(1, sha2("FYPfyp", 256)),
+	(2, sha2("13116487d", 256)),
+	(3, sha2("enchikin", 256));
+
+INSERT INTO `t_message` (`from_user_id`, `title`, `content`) VALUES
 	(1, "Annoucement1", "Hello User! Welcome to the ePre system"),
 	(1, "Annoucement2", "The system is under developmet"),
 	(1, "Annoucement3", "Test Annoucement Test Annoucement");

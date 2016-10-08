@@ -40,7 +40,7 @@ public class MessageController {
 	) {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return "redirect:index.do";
-		model.addAttribute("user_id", user.getUserId());
+		model.addAttribute("user_id", user.getUserName());
 		model.addAttribute("user_name", user.getName());
 		
 		if (null != id) {

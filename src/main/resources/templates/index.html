@@ -12,6 +12,7 @@
 <script type="text/javascript" src="javascript/lib/jquery.js"></script>
 <script type="text/javascript" src="javascript/lib/jquery.form.js"></script>
 <script type="text/javascript" src="javascript/lib/semantic.js"></script>
+<script type="text/javascript" src="javascript/lib/vue.js"></script>
 <script type="text/javascript" src="javascript/index.js"></script>
 </head>
 
@@ -73,22 +74,25 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<div class="ui blue segment">
+				<div id="announcement_div" class="ui blue segment">
+                    <div class="ui inverted dimmer" v-bind:class="loading">
+                        <div class="ui text loader">Loading Announcements ...</div>
+                    </div>
 					<h3 class="ui dividing header">Announcements</h3>
-					<p th:if="${#lists.isEmpty(announcements)}">There is no announcements</p>
-					<ul class="ui divided list" th:unless="${#lists.isEmpty(announcements)}">
-						<li class="item" th:each="announcement : ${announcements}">
+					<p v-if="!hasAnnouncement">There is no announcements</p>
+					<ul class="ui divided list" v-if="hasAnnouncement">
+						<li class="item" v-for="announcement in announcements">
 							<h5 class="announcement_header">
-								<span th:text="${ announcement.getTitle() }"></span>
+								<span>{{ announcement.title }}</span>
 								<i class="ui right floated down angle icon"></i>
 							</h5>
 							<div style="display: none;">
-								<p class="announcement_content" th:text="${ announcement.getContent() }"></p>
-								<p class="announcement_time" th:text="${ announcement.getCreateTimeInfo(null) }"></p>
+								<p class="announcement_content">{{ announcement.content }}</p>
+								<p class="announcement_time">{{ announcement.createTime }}</p>
 							</div>
 						</li>
 					</ul>
-					<a href="annoucement/list.do" th:if="${#lists.size(announcements) > 5}">More Announcements</a>
+					<a href="annoucement/list.do" v-if="hasMore">More Announcements</a>
 				</div>
 			</td>
 		</tr>

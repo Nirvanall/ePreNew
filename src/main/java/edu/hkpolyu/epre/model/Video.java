@@ -18,23 +18,12 @@ import org.hibernate.annotations.DynamicUpdate;
 import edu.hkpolyu.common.model.IdModel;
 
 @Entity
-@Table(name = "Videos")
+@Table(name = "t_video")
 @DynamicUpdate
 public class Video extends IdModel implements Comparable<Video> {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	
-    @Column(name="presentation_id")
-	private Integer presentationId;
-	
-	public Integer getPresentationId(){
-		return presentationId;
-	}
-	
-	public void setPresentationId(Integer presentationId){
-		this.presentationId = presentationId;
-	}
-
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "presentation_id", nullable = false)
 	private Presentation presentation;
@@ -48,16 +37,6 @@ public class Video extends IdModel implements Comparable<Video> {
 	}
 	
 	
-	private Integer userId;
-	
-	public Integer getUserId(){
-		return userId;
-	}
-	
-	public void setUserId(Integer userId){
-		this.userId = userId;
-	}
-
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User owner;
@@ -122,7 +101,7 @@ public class Video extends IdModel implements Comparable<Video> {
 				p.getDepartment().getAbbreviation() + File.separator +
 				p.getYearSemester() + File.separator +
 				"Pre" + p.getId() + File.separator +
-				this.getOwner().getUserId() + "_" + this.getId();
+				this.getOwner().getUserName() + "_" + this.getId();
 	}
 	
 	

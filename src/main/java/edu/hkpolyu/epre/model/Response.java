@@ -8,11 +8,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import org.hibernate.annotations.DynamicUpdate;
+import edu.hkpolyu.common.model.IdModel;
 
 @Entity
-@Table(name = "Reponses")
+@Table(name = "t_response")
 @DynamicUpdate
-public class Response extends UserIdModel {
+public class Response extends IdModel {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	

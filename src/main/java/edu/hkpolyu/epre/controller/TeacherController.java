@@ -34,7 +34,7 @@ public class TeacherController {
 	) {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user || !user.isTeacher()) return "redirect:index.do";
-		model.addAttribute("user_id", user.getUserId());
+		model.addAttribute("user_id", user.getUserName());
 		model.addAttribute("user_name", user.getName());
 		
 		if (null == page || page <= 0) page = 1;

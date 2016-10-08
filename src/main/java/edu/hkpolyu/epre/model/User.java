@@ -52,15 +52,6 @@ public class User extends IdModel implements Comparable<User> {
 		this.name = name;
 	}
 	
-	private Byte departmentId;
-	
-	public Byte getDepartmentId(){
-		return departmentId;
-	}
-	public void setDepartmentId(Byte departmentId){
-		this.departmentId = departmentId;
-	}
-
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "department_id", nullable = false)
 	private Department department;
@@ -112,6 +103,6 @@ public class User extends IdModel implements Comparable<User> {
 		result = category.compareTo(user.category);
 		if (0 != result) return result;
 		
-		return userId.compareTo(user.userId);
+		return userName.compareTo(user.userName);
 	}
 }
