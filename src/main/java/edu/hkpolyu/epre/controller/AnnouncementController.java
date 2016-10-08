@@ -1,12 +1,7 @@
 package edu.hkpolyu.epre.controller;
 
 import java.util.List;
-
 import javax.servlet.http.HttpSession;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.data.domain.Page;
 import edu.hkpolyu.common.response.JsonResponse;
+import edu.hkpolyu.epre.service.AnnouncementService;
 import edu.hkpolyu.epre.model.Message;
 import edu.hkpolyu.epre.model.User;
 
@@ -25,10 +21,10 @@ import edu.hkpolyu.epre.model.User;
  */
 @Controller
 public class AnnouncementController {
-	private SessionFactory sessionFactory;
+	private AnnouncementService announcementService;
 	@Autowired
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	public void setAnnouncementService(AnnouncementService announcementService) {
+		this.announcementService = announcementService;
 	}
 	
 	/**
@@ -51,10 +47,7 @@ public class AnnouncementController {
 		model.addAttribute("user_name", user.getName());
 		
 		if (null != id) {
-			Session session = sessionFactory.openSession();
-			Query query = session.createQuery("FROM Message AS m WHERE m.id = :id AND m.toUser IS NULL");
-			query.setInteger("id", id);
-			Message announcement = (Message)query.uniqueResult();
+			Message announcement = announcementService.getAnnouncementById(id);
 			if (null != announcement) {
 				model.addAttribute("announcement", announcement);
 			}
@@ -85,18 +78,14 @@ public class AnnouncementController {
 			return JsonResponse.getNeedLoginInstance(null);
 		}
 		
-		Session session = sessionFactory.openSession();
 		Message announcement = null;
 		if (null == id || 0 == id) {
 			announcement = new Message();
 			announcement.setFromUser(user);
 			announcement.setTitle(title);
 			announcement.setContent(content);
-			session.save(announcement);
 		} else {
-			Query query = session.createQuery("FROM Message AS m WHERE m.id = :id");
-			query.setInteger("id", id);
-			announcement = (Message)query.uniqueResult();
+			announcement = announcementService.getAnnouncementById(id);
 			if (null == announcement) {
 				return JsonResponse.getMessageNotFoundInstance(null);
 			}
@@ -106,15 +95,15 @@ public class AnnouncementController {
 			}
 			announcement.setTitle(title);
 			announcement.setContent(content);
-			session.update(announcement);
 		}
+		announcement = announcementService.saveAnnouncement(announcement);
 		return new JsonResponse();
 	}
 	
 	@RequestMapping(value = "/announcement/table.do", method = RequestMethod.GET)
 	public String listAction(
 			@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "number", required = false) Integer number,
+			@RequestParam(value = "size", required = false) Integer size,
 			// TODO: search filter
 			HttpSession httpSession,
 			Model model
@@ -127,22 +116,14 @@ public class AnnouncementController {
 		}
 		
 		if (null == page || page <= 0) page = 1;
-		if (null == number || number <= 0) number = 10;
-		int offset = number * (page - 1);
+		if (null == size || size <= 0) size = 10;
 		
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery(
-				"SELECT COUNT(*) FROM Message WHERE toUser IS NULL AND status = 0");
-		Long totalCount = (Long)query.uniqueResult();
-		Long totalPages = totalCount / number + (totalCount % number != 0 ? 1 : 0);
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("totalPages", totalPages);
+		Page<Message> announcements = announcementService.listAnnouncement(
+                page, size);
+		model.addAttribute("totalCount", announcements.getTotalElements());
+		model.addAttribute("totalPages", announcements.getTotalPages());
 		model.addAttribute("page", page);
-		
-		query = session.createQuery(
-				"FROM Message WHERE toUser IS NULL AND status = 0 ORDER BY create_time DESC");
-		query.setFirstResult(offset).setMaxResults(number);
-		@SuppressWarnings("unchecked") List<Message> announcements = (List<Message>)query.list();
+		model.addAttribute("size", size);
 		model.addAttribute("announcements", announcements);
 		
 		return "announcement/table";

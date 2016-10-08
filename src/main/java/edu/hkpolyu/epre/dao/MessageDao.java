@@ -12,7 +12,9 @@ public interface MessageDao extends PagingAndSortingRepository<Message, Integer>
 
     public Iterable<Message> findByToUserId(Integer toUserId, Sort sort);
 
-    public Page<Message> findByToUserIdIsNull(Pageable pageable);
+    public Page<Message> findByStatusAndToUserIdIsNull(
+            Byte status, Pageable pageable);
 
-    public Iterable<Message> findByToUserIdIsNull(Sort sort);
+    public Iterable<Message> findByStatusAndToUserIdIsNull(
+            Byte status, Sort sort);
 }

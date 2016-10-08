@@ -1,20 +1,18 @@
 package edu.hkpolyu.epre.controller;
 
 import java.util.HashMap;
-
 import javax.servlet.http.HttpSession;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.data.domain.Page;
 import edu.hkpolyu.common.response.JsonResponse;
+import edu.hkpolyu.epre.service.AssessmentService;
+import edu.hkpolyu.epre.service.VideoService;
+import edu.hkpolyu.epre.service.CommentService;
 import edu.hkpolyu.epre.model.Assessment;
 import edu.hkpolyu.epre.model.Comment;
 import edu.hkpolyu.epre.model.User;
@@ -23,10 +21,22 @@ import edu.hkpolyu.epre.model.Video;
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
-	private SessionFactory sessionFactory;
+	private VideoService videoService;
 	@Autowired
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	public void setVideoService(VideoService videoService) {
+		this.videoService = videoService;
+	}
+	
+	private AssessmentService assessmentService;
+	@Autowired
+	public void setAssessmentService(AssessmentService assessmentService) {
+		this.assessmentService = assessmentService;
+	}
+	
+	private CommentService commentService;
+	@Autowired
+	public void setCommentService(CommentService commentService) {
+		this.commentService = commentService;
 	}
 	
 	@RequestMapping(value = "/create.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,10 +49,7 @@ public class CommentController {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("FROM Video v WHERE v.id = :videoId AND v.status = 0");
-		query.setInteger("videoId", videoId);
-		Video v = (Video)query.uniqueResult();
+		Video v = videoService.getVideoById();
 		if (null == v)
 			return JsonResponse.getVideoNotFoundInstance(null);
 		
