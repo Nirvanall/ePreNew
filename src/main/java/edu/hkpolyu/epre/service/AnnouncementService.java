@@ -26,7 +26,7 @@ public class AnnouncementService {
     }
 
     public Page<Message> listAnnouncement(int page, int size) {
-        return messageDao.findByStatusAndToUserIdIsNull(
+        return messageDao.findByToUserIdIsNullAndStatus(
                 Message.STATUS_NORMAL, new PageRequest(page - 1, size));
     }
 }

@@ -8,7 +8,13 @@ import edu.hkpolyu.epre.model.Presentation;
 
 public interface PresentationDao extends PagingAndSortingRepository<Presentation, Integer> {
 
-    public Page<Presentation> findByStatus(Pageable pageable);
+    public Page<Presentation> findByStatus(Byte status, Pageable pageable);
 
-    public Iterable<Presentation> findByStatus(Sort sort);
+    public Iterable<Presentation> findByStatus(Byte status, Sort sort);
+
+    public Page<Presentation> findByDepartment_IdAndStatus(
+            Integer departmentId, Byte status, Pageable pageable);
+
+    public Iterable<Presentation> findByDepartment_IdAndStatus(
+            Integer departmentId, Byte status, Sort sort);
 }

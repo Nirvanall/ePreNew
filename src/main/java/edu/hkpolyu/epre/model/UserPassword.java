@@ -57,9 +57,13 @@ public class UserPassword extends StatusModel {
 	}
 	
 	public void setPassword(String password){
-		this.password = password;
+		this.password = sha256(password);
 	}
 	
+    public boolean isPasswordCorrect(String password) {
+        return sha256(password) == this.password;
+    }
+
 	public static final String HEX_DIGITS = "0123456789abcdef";
 	
 	public static String sha256(String password){

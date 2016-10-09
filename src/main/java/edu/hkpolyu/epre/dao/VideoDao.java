@@ -8,9 +8,17 @@ import edu.hkpolyu.epre.model.Video;
 
 public interface VideoDao extends PagingAndSortingRepository<Video, Integer> {
 
-    public Page<Video> findByStatusAndOwnerId(
-            Byte status, Integer ownerId, Pageable pageable);
+    public Page<Video> findByOwner_IdAndStatus(
+            Integer ownerId, Byte status, Pageable pageable);
 
-    public Iterable<Video> findByStatusAndOwnerId(
-            Byte status, Integer ownerId, Sort sort);
+    public Iterable<Video> findByOwner_IdAndStatus(
+            Integer ownerId, Byte status, Sort sort);
+
+    public Page<Video> findByAssessments_Viewer_IdAndAssessments_StatusAndStatus(
+            Integer viewerId, Byte assessmentStatus,
+            Byte videoStatus, Pageable pageable);
+
+    public Iterable<Video> findByAssessments_Viewer_IdAndAssessments_StatusAndStatus(
+            Integer viewerId, Byte assessmentStatus,
+            Byte videoStatus, Sort sort);
 }

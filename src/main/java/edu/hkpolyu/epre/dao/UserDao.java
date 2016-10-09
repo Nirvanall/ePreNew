@@ -10,7 +10,7 @@ public interface UserDao extends PagingAndSortingRepository<User, Integer> {
 
     public Iterable<User> findByUserName(String userName);
 
-    public Iterable<User> findByUserNameAndPasswordPassword(
+    public Iterable<User> findByUserNameAndPassword_Password(
             String userName, String password);
 
     public Page<User> findByStatus(Byte status, Pageable pageable);

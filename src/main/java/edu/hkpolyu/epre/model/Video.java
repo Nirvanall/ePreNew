@@ -83,6 +83,17 @@ public class Video extends IdModel implements Comparable<Video> {
 		this.comments = comments;
 	}
 	
+	@OneToMany(mappedBy = "video", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Assessment> assessments;
+	
+	public List<Assessment> getAssessments() {
+		return assessments;
+	}
+	
+	public void setAssessments(List<Assessment> assessments) {
+		this.assessments = assessments;
+	}
+	
 	
 	public int compareTo(Video video) {
 		int result = presentation.compareTo(video.presentation);

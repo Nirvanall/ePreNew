@@ -21,12 +21,18 @@ public class AssessmentService {
         return assessmentDao.findOne(assessmentId);
     }
 
-    public Assessment saveAssessment(Assessment assessment) {
-        return assessmentDao.save(assessment);
+    public Assessment getAssessmentByVideoIdAndViewerId(
+            Integer videoId, Integer viewerId) {
+        Iterator<Assessment> iterator =
+                assessmentDao.findByVideo_IdAndViewer_IdAndStatus(
+                        videoId, viewerId, Assessment.STATUS_NORMAL);
+        if (iterator.hasNext()) {
+            return iterator.next();
+        }
+        return null;
     }
 
-    public Page<Assessment> listAssessment(int page, int size) {
-        return assessmentDao.findByStatusAndToUserIdIsNull(
-                Assessment.STATUS_NORMAL, new PageRequest(page - 1, size));
+    public Assessment saveAssessment(Assessment assessment) {
+        return assessmentDao.save(assessment);
     }
 }

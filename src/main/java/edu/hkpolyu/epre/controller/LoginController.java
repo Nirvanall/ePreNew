@@ -1,7 +1,6 @@
 package edu.hkpolyu.epre.controller;
 
 import javax.servlet.http.HttpSession;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,30 +12,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import edu.hkpolyu.common.response.JsonResponse;
+import edu.hkpolyu.epre.service.UserService;
+import edu.hkpolyu.epre.service.UserPasswordService;
 import edu.hkpolyu.epre.model.User;
 import edu.hkpolyu.epre.model.UserPassword;
 
 @Controller
 public class LoginController {
-	private SessionFactory sessionFactory;
+	private UserService userService;
 	@Autowired
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+	
+	private UserPasswordService passwordService;
+	@Autowired
+	public void setUserPasswordService(UserPasswordService passwordService) {
+		this.passwordService = passwordService;
 	}
 	
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public String loginAction(
-			@RequestParam(value="user", required=true) String userId,
+			@RequestParam(value="user", required=true) String userName,
 			@RequestParam(value="password", required=true) String password,
 			HttpSession httpSession,
 			Model model
 	) {
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("FROM User WHERE userId=:userId AND password=sha2(:password, 256)");
-		query.setString("userId", userId).setString("password", password);
-		User user = (User)query.uniqueResult();
+		User user = userService.getUserByUserNameAndPassword(userName, password);
 		if (null == user) return "redirect:index.do?source=login";
 
 		httpSession.setAttribute("user", user);
@@ -80,14 +83,11 @@ public class LoginController {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("FROM User WHERE id=:id AND password=sha2(:password, 256)");
-		query.setInteger("id", user.getId()).setString("password", oldPassword);
-		user = (User)query.uniqueResult();
-		if (null == user) return JsonResponse.getWrongPasswordInstance(null);
+		if (passwordService.isPasswordCorrect(user.getId(), oldPassword) {
+            return JsonResponse.getWrongPasswordInstance(null);
+        }
 		
-		user.getPassword().setPassword(UserPassword.sha256(newPassword));
-		session.update(user);
+		passwordService.savePassword(user.getId(), newPassword);
 		httpSession.setAttribute("user", user);
 		
 		return new JsonResponse();

@@ -8,13 +8,15 @@ import edu.hkpolyu.epre.model.Message;
 
 public interface MessageDao extends PagingAndSortingRepository<Message, Integer> {
 
-    public Page<Message> findByToUserId(Integer toUserId, Pageable pageable);
+    public Page<Message> findByToUserIdAndStatus(
+            Integer toUserId, Byte status, Pageable pageable);
 
-    public Iterable<Message> findByToUserId(Integer toUserId, Sort sort);
+    public Iterable<Message> findByToUserIdAndStatus(
+            Integer toUserId, Byte status, Sort sort);
 
-    public Page<Message> findByStatusAndToUserIdIsNull(
+    public Page<Message> findByToUserIdIsNullAndStatus(
             Byte status, Pageable pageable);
 
-    public Iterable<Message> findByStatusAndToUserIdIsNull(
+    public Iterable<Message> findByToUserIdIsNullAndStatus(
             Byte status, Sort sort);
 }
