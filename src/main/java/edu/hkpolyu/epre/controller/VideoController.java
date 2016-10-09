@@ -21,7 +21,7 @@ import edu.hkpolyu.epre.service.UserService;
 
 @Controller
 @RequestMapping("/video")
-public class PresentationController {
+public class VideoController {
 	private PresentationService presentationService;
 	@Autowired
 	public void setPresentationService(PresentationService presentationService) {
@@ -135,7 +135,7 @@ public class PresentationController {
 			return JsonResponse.getVideoNotFoundInstance(null);
 		
 		if (null != userName && userName.length() > 0) {
-			User u = userService.getByUserName(userName);
+			User u = userService.getUserByUserName(userName);
 			v.setOwner(u);
 		}
 		if (null != name && name.length() > 0) v.setName(name);

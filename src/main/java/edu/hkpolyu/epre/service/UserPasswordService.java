@@ -13,7 +13,7 @@ public class UserPasswordService {
 
     private UserPasswordDao passwordDao;
     @Autowired
-    public void setUserPasswordDao(UserDao passwordDao) {
+    public void setUserPasswordDao(UserPasswordDao passwordDao) {
         this.passwordDao = passwordDao;
     }
 

@@ -49,13 +49,10 @@ public class CommentController {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
-		Video v = videoService.getVideoById();
+		Video v = videoService.getVideoById(videoId);
 		if (null == v)
 			return JsonResponse.getVideoNotFoundInstance(null);
 		
-		query = session.createQuery("FROM Assessment a " +
-				"WHERE a.video.id = :videoId AND a.viewer.id = :userId AND a.status = 0");
-		query.setInteger("videoId", videoId).setInteger("userId", user.getId());
 		Assessment a = (Assessment)query.uniqueResult();
 		if (null == a || !a.canComment())
 			return JsonResponse.getNoPermissionInstance("You do not have the permission to comment this video");

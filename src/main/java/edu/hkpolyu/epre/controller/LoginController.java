@@ -83,7 +83,7 @@ public class LoginController {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
-		if (passwordService.isPasswordCorrect(user.getId(), oldPassword) {
+		if (passwordService.isPasswordCorrect(user.getId(), oldPassword)) {
             return JsonResponse.getWrongPasswordInstance(null);
         }
 		

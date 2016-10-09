@@ -25,8 +25,9 @@ public class PresentationService {
         return presentationDao.save(presentation);
     }
 
-    public Page<Presentation> listPresentation(int page, int size) {
-        return presentationDao.findByStatusAndToUserIdIsNull(
+    public Page<Presentation> listPresentationByDepartmentId(
+            Integer departmentId, int page, int size) {
+        return presentationDao.findByDepartment_IdAndStatus(departmentId,
                 Presentation.STATUS_NORMAL, new PageRequest(page - 1, size));
     }
 }

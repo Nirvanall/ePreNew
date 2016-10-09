@@ -1,6 +1,6 @@
 package edu.hkpolyu.epre.service;
 
-import java.util.List;
+import java.util.Iterator;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,7 +25,7 @@ public class AssessmentService {
             Integer videoId, Integer viewerId) {
         Iterator<Assessment> iterator =
                 assessmentDao.findByVideo_IdAndViewer_IdAndStatus(
-                        videoId, viewerId, Assessment.STATUS_NORMAL);
+                        videoId, viewerId, Assessment.STATUS_NORMAL).iterator();
         if (iterator.hasNext()) {
             return iterator.next();
         }
