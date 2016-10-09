@@ -1,12 +1,7 @@
 package edu.hkpolyu.epre.controller;
 
 import java.util.List;
-
 import javax.servlet.http.HttpSession;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -14,20 +9,41 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import edu.hkpolyu.common.response.JsonResponse;
 import edu.hkpolyu.epre.model.Assessment;
 import edu.hkpolyu.epre.model.Presentation;
 import edu.hkpolyu.epre.model.User;
 import edu.hkpolyu.epre.model.Video;
+import edu.hkpolyu.epre.service.AssessmentService;
+import edu.hkpolyu.epre.service.VideoService;
+import edu.hkpolyu.epre.service.PresentationService;
+import edu.hkpolyu.epre.service.UserService;
 
 @Controller
 @RequestMapping("/video")
-public class VideoController {
-	private SessionFactory sessionFactory;
+public class PresentationController {
+	private PresentationService presentationService;
 	@Autowired
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	public void setPresentationService(PresentationService presentationService) {
+		this.presentationService = presentationService;
+	}
+	
+	private UserService userService;
+	@Autowired
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+	
+	private VideoService videoService;
+	@Autowired
+	public void setVideoService(VideoService videoService) {
+		this.videoService = videoService;
+	}
+	
+	private AssessmentService assessmentService;
+	@Autowired
+	public void setAssessmentService(AssessmentService assessmentService) {
+		this.assessmentService = assessmentService;
 	}
 	
 	@RequestMapping(value = "/view.do", method = RequestMethod.GET)
@@ -41,26 +57,21 @@ public class VideoController {
 		model.addAttribute("user_id", user.getUserName());
 		model.addAttribute("user_name", user.getName());
 		
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("FROM Video v WHERE v.id = :videoId AND v.status = 0");
-		query.setInteger("videoId", videoId);
-		Video v = (Video)query.uniqueResult();
-		if (null == v)
+		Video video = videoService.getVideoById(videoId);
+		if (null == video)
 			return "errors/video-not-found"; // TODO: video not found page
 		
-		if (v.getOwner().getId() != user.getId()) {
-			query = session.createQuery("FROM Assessment a " +
-					"WHERE a.video.id = :videoId AND a.viewer.id = :userId AND a.status = 0");
-			query.setInteger("videoId", videoId).setInteger("userId", user.getId());
-			Assessment a = (Assessment)query.uniqueResult();
-			if (null == a)
+		if (video.getOwner().getId() != user.getId()) {
+			Assessment assessment = assessmentService.getAssessmentByVideoIdAndViewerId(
+                    videoId, user.getId());
+			if (null == assessment)
 				return "errors/no-permission"; // TODO: no access permission page
 			
-			model.addAttribute("assessment", a);
+			model.addAttribute("assessment", assessment);
 		} else {
 			model.addAttribute("assessment", null);
 		}
-		model.addAttribute("video", v);
+		model.addAttribute("video", video);
 		
 		return "video";
 	}
@@ -68,7 +79,7 @@ public class VideoController {
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonResponse addAction(
 			@RequestParam(value = "presentation_id") Integer presentationId,
-			@RequestParam(value = "user_id") String userName,
+			@RequestParam(value = "user_name") String userName,
 			@RequestParam(value = "name") String name,
 			@RequestParam(value = "info") String info,
 			HttpSession httpSession
@@ -76,17 +87,12 @@ public class VideoController {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("FROM Presentation WHERE id = :presentationId AND status = 0");
-		query.setInteger("presentationId", presentationId);
-		Presentation p = (Presentation)query.uniqueResult();
+		Presentation p = presentationService.getPresentationById(presentationId);
 		if (null == p) {
 			return JsonResponse.getPresentationNotFoundInstance(null);
 		}
 		
-		query = session.createQuery("FROM User WHERE userName = :userName AND status = 0");
-		query.setString("userName", userName);
-		User u = (User)query.uniqueResult();
+		User u = userService.getUserByUserName(userName);
 		if (null == u) {
 			return JsonResponse.getUserNotFoundInstance(null);
 		}
@@ -96,7 +102,7 @@ public class VideoController {
 		v.setOwner(u);
 		v.setName(name);
 		v.setInfo(info);
-		session.saveOrUpdate(v);
+		videoService.saveVideo(v);
 		
 		return new JsonResponse();
 	}
@@ -109,15 +115,14 @@ public class VideoController {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
-		Session session = sessionFactory.openSession();
-		
+		// TODO:
 		return new JsonResponse();
 	}
 	
 	@RequestMapping(value = "/update.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonResponse updateAction(
 			@RequestParam(value = "id", required = true) Integer videoId,
-			@RequestParam(value = "userId", required = false) String userId,
+			@RequestParam(value = "user_name", required = false) String userName,
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "info", required = false) String info,
 			HttpSession httpSession
@@ -125,22 +130,17 @@ public class VideoController {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("FROM Video WHERE id = :videoId AND status = 0");
-		query.setInteger("videoId", videoId);
-		Video v = (Video)query.uniqueResult();
+		Video v = videoService.getVideoById(videoId);
 		if (null == v)
 			return JsonResponse.getVideoNotFoundInstance(null);
 		
-		if (null != userId && userId.length() > 0) {
-			query = session.createQuery("FROM User WHERE userName = :userId AND status = 0");
-			query.setString("userId", userId);
-			User u = (User)query.uniqueResult();
+		if (null != userName && userName.length() > 0) {
+			User u = userService.getByUserName(userName);
 			v.setOwner(u);
 		}
 		if (null != name && name.length() > 0) v.setName(name);
 		if (null != info && info.length() > 0) v.setInfo(info);
-		session.saveOrUpdate(v);
+		videoService.saveVideo(v);
 		
 		return new JsonResponse();
 	}
@@ -152,15 +152,12 @@ public class VideoController {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("FROM Video WHERE id = :videoId AND status = 0");
-		query.setInteger("videoId", videoId);
-		Video v = (Video)query.uniqueResult();
+		Video v = videoService.getVideoById(videoId);
 		if (null == v)
 			return JsonResponse.getVideoNotFoundInstance(null);
 		
 		v.statusDeleted();
-		session.saveOrUpdate(v);
+		videoService.saveVideo(v);
 		
 		return new JsonResponse();
 	}

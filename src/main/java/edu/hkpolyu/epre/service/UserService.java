@@ -22,6 +22,15 @@ public class UserService {
         return userDao.findOne(userId);
     }
 
+    public User getUserByUserName(String userName) {
+        Iterator<User> iterator = userDao.findByUserName(
+                userName).iterator();
+        if (iterator.hasNext()) {
+            return iterator.next();
+        }
+        return null;
+    }
+
     public User getUserByUserNameAndPassword(String userName, String password) {
         Iterator<User> iterator = userDao.findByUserNameAndPassword_Password(
                 userName, UserPassword.sha256(password)).iterator();
