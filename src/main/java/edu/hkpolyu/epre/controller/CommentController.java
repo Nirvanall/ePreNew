@@ -53,8 +53,9 @@ public class CommentController {
 		if (null == v)
 			return JsonResponse.getVideoNotFoundInstance(null);
 		
-		Assessment a = (Assessment)query.uniqueResult();
-		if (null == a || !a.canComment())
+        Assessment assessment = assessmentService.getAssessmentByVideoIdAndViewerId(
+                videoId, user.getId());
+		if (null == assessment || !assessment.canComment())
 			return JsonResponse.getNoPermissionInstance("You do not have the permission to comment this video");
 			
 		Comment c = new Comment();
@@ -62,7 +63,7 @@ public class CommentController {
 		c.setVideo(v);
 		c.setPlaytime(playtime);
 		c.setContent(content);
-		session.saveOrUpdate(c);
+		commentService.saveComment(c);
 		
 		HashMap<String, Object> userMap = new HashMap<String, Object>();
 		userMap.put("name", user.getName());
@@ -81,17 +82,14 @@ public class CommentController {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("FROM Comment WHERE id = :commentId AND status = 0");
-		query.setInteger("commentId", commentId);
-		Comment c = (Comment)query.uniqueResult();
+		Comment c = commentService.getCommentById(commentId);
 		if (null == c)
 			return JsonResponse.getCommentNotFoundInstance(null);
 		if (c.getCommenter().getId() != user.getId())
 			return JsonResponse.getNoPermissionInstance("You cannot edit the comment that is not yours");
 		
 		c.setContent(content);
-		session.saveOrUpdate(c);
+		commentService.saveComment(c);
 		
 		return new JsonResponse();
 	}
@@ -104,10 +102,7 @@ public class CommentController {
 		User user = (User)httpSession.getAttribute("user");
 		if (null == user) return JsonResponse.getNeedLoginInstance(null);
 		
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("FROM Comment WHERE id = :commentId");
-		query.setInteger("commentId", commentId);
-		Comment c = (Comment)query.uniqueResult();
+		Comment c = commentService.getCommentById(commentId);
 		if (null == c)
 			return JsonResponse.getCommentNotFoundInstance(null);
 		if (c.getCommenter().getId() != user.getId())
@@ -115,7 +110,7 @@ public class CommentController {
 		
 		if (!c.isStatusDeleted()) {
 			c.statusDeleted();
-			session.saveOrUpdate(c);
+			commentService.saveComment(c);
 		}
 		
 		return new JsonResponse();
