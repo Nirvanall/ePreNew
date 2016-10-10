@@ -1,5 +1,7 @@
 package edu.hkpolyu.common.model;
 
+import java.util.Map;
+import java.util.HashMap;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
@@ -62,5 +64,16 @@ public abstract class StatusModel extends TimeModel {
 
 	public void statusUploading() {
 		status = STATUS_UPLOADING;
+	}
+	
+	public String getStatusInfo() {
+		// TODO:
+		return "Undefined";
+	}
+	
+	public HashMap<String, Object> toMap(Map<String, Boolean> options) {
+		HashMap<String, Object> result = super.toMap(options);
+		// if (options.get("status")) result.put("status", this.getStatusInfo());
+		return result;
 	}
 }

@@ -1,5 +1,7 @@
 package edu.hkpolyu.common.model;
 
+import java.util.Map;
+import java.util.HashMap;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,5 +20,11 @@ public abstract class IdModel extends StatusModel {
 	
 	public void setId(Integer id){
 		this.id = id;
+	}
+	
+	public HashMap<String, Object> toMap(Map<String, Boolean> options) {
+		HashMap<String, Object> result = super.toMap(options);
+		if (options.get("id")) result.put("id", this.getId());
+		return result;
 	}
 }

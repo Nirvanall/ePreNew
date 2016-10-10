@@ -1,7 +1,11 @@
 package edu.hkpolyu.epre.controller;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -126,6 +130,37 @@ public class AnnouncementController {
 		model.addAttribute("announcements", announcements);
 		
 		return "announcement/table";
+	}
+	
+	@RequestMapping(value = "/announcement/list.do", method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public JsonResponse listAction(
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "size", required = false) Integer size
+			// TODO: search filter
+	) {
+		if (null == page || page <= 0) page = 1;
+		if (null == size || size <= 0) size = 10;
+		
+		Page<Message> announcements = announcementService.listAnnouncement(
+                page, size);
+
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		result.put("total_count", announcements.getTotalElements());
+		result.put("total_pages", announcements.getTotalPages());
+		result.put("page", page);
+		result.put("size", size);
+		
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		HashMap<String, Boolean> options = new HashMap<String, Boolean>();
+		options.put("id", true);
+		options.put("create_time", true);
+		for (Message announcement : announcements) {
+			list.add(announcement.toMap(options));
+		}
+		result.put("list", list);
+		
+		return new JsonResponse(result);
 	}
 	
 }

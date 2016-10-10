@@ -1,8 +1,9 @@
 $(document).ready(function(){
     "use strict";
 
+	var dateFormatter = new DateFormatter();
     var announcementList = new Vue({
-        "el": "announcement_div",
+        "el": "#announcement_div",
         "data": {
             "loading": "active",
             "hasAnnouncement": false,
@@ -11,18 +12,20 @@ $(document).ready(function(){
         },
         "created": function () {
             $.ajax({
-                "url": "announcement/list",
+                "url": "announcement/list.do",
                 "method": "GET",
-                "data": {"start": 0, "count": 6},
+                "data": {"page": 1, "size": 6},
                 "dataType": "json",
                 "error": function () {
                 },
                 "success": function (ret) {
                     if (0 === ret.code) {
-                        var list = ret.data;
+                        var list = ret.data.list;
                         this.hasAnnouncement = (list.length > 0);
                         this.hasMore = (list.length > 5);
                         for (var i = 0; i < 5; ++i) {
+							list[i].create_time = dateFormatter.formatDate(
+									new Date(list[i].create_time), 'Y-m-d H:i');
                             this.announcements.push(list[i]);
                         }
                         this.loading = "";

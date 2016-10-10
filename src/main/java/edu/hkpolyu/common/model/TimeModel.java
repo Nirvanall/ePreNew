@@ -3,7 +3,8 @@ package edu.hkpolyu.common.model;
 import java.io.Serializable;
 import java.sql.Date;
 import java.text.DateFormat;
-
+import java.util.Map;
+import java.util.HashMap;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
@@ -48,5 +49,12 @@ public abstract class TimeModel implements Serializable {
 	public String getUpdateTimeInfo(DateFormat formater) {
 		if (null == formater) formater = DateFormat.getDateInstance(DateFormat.MEDIUM);
 		return formater.format(updateTime);
+	}
+	
+	public HashMap<String, Object> toMap(Map<String, Boolean> options) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		if (options.get("create_time")) result.put("create_time", this.getCreateTime().getTime());
+		if (options.get("update_time")) result.put("update_time", this.getUpdateTime().getTime());
+		return result;
 	}
 }

@@ -1,5 +1,7 @@
 package edu.hkpolyu.epre.model;
 
+import java.util.Map;
+import java.util.HashMap;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -59,5 +61,12 @@ public class Message extends IdModel implements Comparable<Message> {
 	
 	public int compareTo(Message message) {
 		return -(this.getCreateTime().compareTo(message.getCreateTime()));
+	}
+	
+	public HashMap<String, Object> toMap(Map<String, Boolean> options) {
+		HashMap<String, Object> result = super.toMap(options);
+		result.put("title", this.getTitle());
+		result.put("content", this.getContent());
+		return result;
 	}
 }

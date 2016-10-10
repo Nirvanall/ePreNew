@@ -1,7 +1,8 @@
 package edu.hkpolyu.epre.model;
 
 import java.util.List;
-
+import java.util.Map;
+import java.util.HashMap;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -101,5 +102,12 @@ public class Comment extends IdModel implements Comparable<Comment> {
 		if (0 != result) return result;
 		
 		return -(this.getCreateTime().compareTo(comment.getCreateTime()));
+	}
+	
+	public HashMap<String, Object> toMap(Map<String, Boolean> options) {
+		HashMap<String, Object> result = super.toMap(options);
+		result.put("playtime", this.getPlaytime());
+		result.put("content", this.getContent());
+		return result;
 	}
 }

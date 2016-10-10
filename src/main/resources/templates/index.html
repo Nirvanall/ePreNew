@@ -13,6 +13,7 @@
 <script type="text/javascript" src="javascript/lib/jquery.form.js"></script>
 <script type="text/javascript" src="javascript/lib/semantic.js"></script>
 <script type="text/javascript" src="javascript/lib/vue.js"></script>
+<script type="text/javascript" src="javascript/lib/php-date-formatter.min.js"></script>
 <script type="text/javascript" src="javascript/index.js"></script>
 </head>
 
@@ -88,11 +89,11 @@
 							</h5>
 							<div style="display: none;">
 								<p class="announcement_content">{{ announcement.content }}</p>
-								<p class="announcement_time">{{ announcement.createTime }}</p>
+								<p class="announcement_time">{{ announcement.create_time }}</p>
 							</div>
 						</li>
 					</ul>
-					<a href="annoucement/list.do" v-if="hasMore">More Announcements</a>
+					<a href="announcement/table.do" v-if="hasMore">More Announcements</a>
 				</div>
 			</td>
 		</tr>
