@@ -1,17 +1,13 @@
 package edu.hkpolyu.epre.controller;
 
 import java.util.List;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import edu.hkpolyu.epre.service.AnnouncementService;
 import edu.hkpolyu.epre.model.Message;
 
 /**
@@ -20,20 +16,17 @@ import edu.hkpolyu.epre.model.Message;
  */
 @Controller
 public class IndexController {
-	private SessionFactory sessionFactory;
+	private AnnouncementService announcementService;
 	@Autowired
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	public void setAnnouncementService(AnnouncementService announcementService) {
+		this.announcementService = announcementService;
 	}
 	
 	@RequestMapping(value = "/index.do", method = RequestMethod.GET)
 	public String indexAction(
 			@RequestParam(value = "source", required = false) String source,
 			Model model) {
-		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("FROM Message WHERE toUser IS NULL ORDER BY createTime DESC, id DESC");
-		query.setMaxResults(6);
-		@SuppressWarnings("unchecked") List<Message> announcements = (List<Message>)query.list();
+		Iterable<Message> announcements = announcementService.listAnnouncement(1, 6);
 		model.addAttribute("announcements", announcements);
 		
 		if (null != source && source.equalsIgnoreCase("login")) {

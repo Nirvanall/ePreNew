@@ -26,7 +26,7 @@ public class CommentService {
         return commentDao.save(comment);
     }
 
-    public Page<Comment> listCommentByVideoId(Integer videoId) {
+    public Iterable<Comment> listCommentByVideoId(Integer videoId) {
 		ArrayList<Sort.Order> orders = new ArrayList<Sort.Order>();
 		orders.add(new Sort.Order(Sort.Direction.ASC, "playtime"));
 		orders.add(new Sort.Order(Sort.Direction.ASC, "id"));

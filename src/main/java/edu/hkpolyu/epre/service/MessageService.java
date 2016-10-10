@@ -9,7 +9,7 @@ import edu.hkpolyu.epre.dao.MessageDao;
 import edu.hkpolyu.epre.model.Message;
 
 @Component
-public class AnnouncementService {
+public class MessageService {
 
     private MessageDao messageDao;
     @Autowired
@@ -17,16 +17,23 @@ public class AnnouncementService {
         this.messageDao = messageDao;
     }
 
-    public Message getAnnouncementById(Integer announcementId) {
+    public Message getMessageById(Integer announcementId) {
         return messageDao.findOne(announcementId);
     }
 
-    public Message saveAnnouncement(Message announcement) {
+    public Message saveMessage(Message announcement) {
         return messageDao.save(announcement);
     }
 
-    public Page<Message> listAnnouncement(int page, int size) {
-        return messageDao.findByToUserIsNullAndStatus(
+    public Page<Message> listMessageByFromUserId(
+			Integer fromUserId, int page, int size) {
+        return messageDao.findByFromUser_IdAndStatus(fromUserId,
+                Message.STATUS_NORMAL, new PageRequest(page - 1, size));
+    }
+	
+	public Page<Message> listMessageByToUserId(
+			Integer toUserId, int page, int size) {
+        return messageDao.findByToUser_IdAndStatus(toUserId,
                 Message.STATUS_NORMAL, new PageRequest(page - 1, size));
     }
 }
