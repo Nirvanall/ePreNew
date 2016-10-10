@@ -8,13 +8,9 @@ import edu.hkpolyu.epre.model.Comment;
 
 public interface CommentDao extends PagingAndSortingRepository<Comment, Integer> {
 
-    public Page<Comment> findByToUserId(Integer toUserId, Pageable pageable);
+    public Page<Comment> findByVideo_IdAndStatus(
+            Integer videoId, Byte status, Pageable pageable);
 
-    public Iterable<Comment> findByToUserId(Integer toUserId, Sort sort);
-
-    public Page<Comment> findByStatusAndToUserIdIsNull(
-            Byte status, Pageable pageable);
-
-    public Iterable<Comment> findByStatusAndToUserIdIsNull(
-            Byte status, Sort sort);
+    public Iterable<Comment> findByVideo_IdAndStatus(
+            Integer videoId, Byte status, Sort sort);
 }
