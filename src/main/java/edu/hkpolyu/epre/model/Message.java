@@ -63,7 +63,7 @@ public class Message extends IdModel implements Comparable<Message> {
 		return -(this.getCreateTime().compareTo(message.getCreateTime()));
 	}
 	
-	public HashMap<String, Object> toMap(Map<String, Boolean> options) {
+	public HashMap<String, Object> toMap(Map<String, Object> options) {
 		HashMap<String, Object> result = super.toMap(options);
 		result.put("title", this.getTitle());
 		result.put("content", this.getContent());

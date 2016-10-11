@@ -104,7 +104,7 @@ public class Comment extends IdModel implements Comparable<Comment> {
 		return -(this.getCreateTime().compareTo(comment.getCreateTime()));
 	}
 	
-	public HashMap<String, Object> toMap(Map<String, Boolean> options) {
+	public HashMap<String, Object> toMap(Map<String, Object> options) {
 		HashMap<String, Object> result = super.toMap(options);
 		result.put("playtime", this.getPlaytime());
 		result.put("content", this.getContent());

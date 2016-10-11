@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import edu.hkpolyu.common.helper.TrueValueHelper;
 
 @MappedSuperclass
 public abstract class StatusModel extends TimeModel {
@@ -71,9 +72,11 @@ public abstract class StatusModel extends TimeModel {
 		return "Undefined";
 	}
 	
-	public HashMap<String, Object> toMap(Map<String, Boolean> options) {
+	public HashMap<String, Object> toMap(Map<String, Object> options) {
 		HashMap<String, Object> result = super.toMap(options);
-		// if (options.get("status")) result.put("status", this.getStatusInfo());
+		if (TrueValueHelper.isTrue(options, "status")) {
+			result.put("status", this.getStatusInfo());
+		}
 		return result;
 	}
 }

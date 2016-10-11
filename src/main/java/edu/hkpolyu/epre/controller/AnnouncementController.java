@@ -134,6 +134,7 @@ public class AnnouncementController {
 	
 	@RequestMapping(value = "/announcement/list.do", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
 	public JsonResponse listAction(
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size
@@ -152,7 +153,7 @@ public class AnnouncementController {
 		result.put("size", size);
 		
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-		HashMap<String, Boolean> options = new HashMap<String, Boolean>();
+		HashMap<String, Object> options = new HashMap<String, Object>();
 		options.put("id", true);
 		options.put("create_time", true);
 		for (Message announcement : announcements) {

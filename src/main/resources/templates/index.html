@@ -76,14 +76,11 @@
 		<tr>
 			<td colspan="2">
 				<div id="announcement_div" class="ui blue segment">
-                    <div class="ui inverted dimmer" v-bind:class="loading">
-                        <div class="ui text loader">Loading Announcements ...</div>
-                    </div>
-					<h3 class="ui dividing header">Announcements</h3>
+                    <h3 class="ui dividing header">Announcements</h3>
 					<p v-if="!hasAnnouncement">There is no announcements</p>
 					<ul class="ui divided list" v-if="hasAnnouncement">
 						<li class="item" v-for="announcement in announcements">
-							<h5 class="announcement_header">
+							<h5 class="announcement_header" v-on:click="toggleAnnouncement">
 								<span>{{ announcement.title }}</span>
 								<i class="ui right floated down angle icon"></i>
 							</h5>
@@ -94,6 +91,9 @@
 						</li>
 					</ul>
 					<a href="announcement/table.do" v-if="hasMore">More Announcements</a>
+					<div class="ui inverted dimmer" v-bind:class="loading">
+                        <div class="ui text loader">Loading Announcements ...</div>
+                    </div>
 				</div>
 			</td>
 		</tr>

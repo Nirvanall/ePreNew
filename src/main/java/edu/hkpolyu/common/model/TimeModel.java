@@ -1,31 +1,35 @@
 package edu.hkpolyu.common.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.Map;
 import java.util.HashMap;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import edu.hkpolyu.common.helper.TrueValueHelper;
 
 @MappedSuperclass
 public abstract class TimeModel implements Serializable {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	
+	private static final Logger log = LoggerFactory.getLogger(TimeModel.class);
+	
 	@Column(name = "create_time", insertable = false, updatable = false)
 	@Generated(value = GenerationTime.INSERT)
-	protected Date createTime;
+	protected Timestamp createTime;
 	
-	public Date getCreateTime() {
+	public Timestamp getCreateTime() {
 		return createTime;
 	}
 	
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
 	}
 	
@@ -36,13 +40,13 @@ public abstract class TimeModel implements Serializable {
 	
 	@Column(name = "update_time", insertable = false, updatable = false)
 	@Generated(value = GenerationTime.ALWAYS)
-	protected Date updateTime;
+	protected Timestamp updateTime;
 	
-	public Date getUpdateTime() {
+	public Timestamp getUpdateTime() {
 		return updateTime;
 	}
 	
-	public void setUpdateTime(Date updateTime) {
+	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
 	}
 	
@@ -51,10 +55,27 @@ public abstract class TimeModel implements Serializable {
 		return formater.format(updateTime);
 	}
 	
-	public HashMap<String, Object> toMap(Map<String, Boolean> options) {
+	public HashMap<String, Object> toMap(Map<String, Object> options) {
+		log.debug(this.getCreateTime().toString());
+		
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		if (options.get("create_time")) result.put("create_time", this.getCreateTime().getTime());
-		if (options.get("update_time")) result.put("update_time", this.getUpdateTime().getTime());
+		if (TrueValueHelper.isTrue(options, "create_time")) {
+			result.put("create_time", this.getCreateTime().getTime());
+		}
+		if (TrueValueHelper.isTrue(options, "update_time")) {
+			result.put("update_time", this.getUpdateTime().getTime());
+		}
+		
+		Object obj = options.get("create_time_info");
+		if (obj instanceof DateFormat) {
+			result.put("create_time_info", this.getCreateTimeInfo(
+					(DateFormat)obj));
+		}
+		obj = options.get("update_time_info");
+		if (obj instanceof DateFormat) {
+			result.put("update_time_info", this.getUpdateTimeInfo(
+					(DateFormat)obj));
+		}
 		return result;
 	}
 }

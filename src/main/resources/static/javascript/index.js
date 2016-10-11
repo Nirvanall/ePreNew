@@ -21,18 +21,25 @@ $(document).ready(function(){
                 "success": function (ret) {
                     if (0 === ret.code) {
                         var list = ret.data.list;
-                        this.hasAnnouncement = (list.length > 0);
-                        this.hasMore = (list.length > 5);
-                        for (var i = 0; i < 5; ++i) {
+                        announcementList.hasAnnouncement = (list.length > 0);
+                        announcementList.hasMore = (list.length > 5);
+                        for (var i = 0; i < list.length && i < 5; ++i) {
 							list[i].create_time = dateFormatter.formatDate(
 									new Date(list[i].create_time), 'Y-m-d H:i');
-                            this.announcements.push(list[i]);
+                            announcementList.announcements.push(list[i]);
                         }
-                        this.loading = "";
+                        announcementList.loading = "";
                     }
                 }
             });
-        }
+        },
+		methods: {
+			toggleAnnouncement: function (event) {
+				var $thiz = $(event.currentTarget);
+				$thiz.siblings("div").slideToggle();
+				$thiz.find(".angle.icon").toggleClass("up").toggleClass("down");
+			}
+		}
     });
 
 	$("#login-form").form({
@@ -53,8 +60,5 @@ $(document).ready(function(){
 			}
 		}
 	});
-	$(".announcement_header").click(function toggleAnnouncement() {
-		$(this).siblings("div").slideToggle();
-		$(this).find(".angle.icon").toggleClass("up").toggleClass("down");
-	});
+	
 });
