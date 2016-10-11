@@ -1,7 +1,6 @@
 #!/bin/sh
 # This script requires root priviledge
 
-NGINX=nginx-epre
 MYSQL=mysql-epre
 REDIS=redis-epre
 JDK=jdk-epre
@@ -13,7 +12,7 @@ WEBDIR=$BASEDIR/ePreNew
 
 set -e
 set -x
-add-apt-repository ppa:saiarcot895/myppa
+add-apt-repository -y ppa:saiarcot895/myppa
 apt-get update
 apt-get -y install apt-fast
 curl -sSL https://git.daocloud.io/docker | sed 's/apt-get install/apt-fast install/g' | sh
@@ -27,14 +26,18 @@ done' > $BASEDIR/jdk/sleep.sh
 chmod a+x $BASEDIR/jdk/sleep.sh
 
 apt-fast install -y zip
-curl -o $BASEDIR/jdk/gradle-3.1-bin.zip https://services.gradle.org/distributions/gradle-3.1-bin.zip
-unzip $BASEDIR/jdk/gradle-3.1-bin.zip
+if [ ! -d $BASEDIR/jdk/gradle-3.1 ]; then
+	cd $BASEDIR/jdk
+	[ -e $BASEDIR/jdk/gradle-3.1-bin.zip ] && rm -f $BASEDIR/jdk/gradle-3.1-bin.zip
+	aria2c -j5 -s5 -x5 https://services.gradle.org/distributions/gradle-3.1-bin.zip
+	unzip $BASEDIR/jdk/gradle-3.1-bin.zip
+fi
 
 [ -d $BASEDIR/conf/redis ] || mkdir $BASEDIR/conf/redis -p
 [ -e $BASEDIR/conf/redis/redis.conf ] || curl -o $BASEDIR/conf/redis/redis.conf https://raw.githubusercontent.com/antirez/redis/3.2/redis.conf
 sed -i '/^bind / s/b/# b/;/ requirepass/ a\requirepass R00T@root!' $BASEDIR/conf/redis/redis.conf
 
-docker rm -fv $NGINX $JDK $MYSQL $REDIS || echo ''
+docker rm -fv $JDK $MYSQL $REDIS || echo ''
 
 docker run --name $REDIS \
 -v $BASEDIR/redis:/home \
@@ -71,17 +74,4 @@ docker run --name $JDK \
 -e $SETXTERM \
 -e $TIMEZONE \
 -e GRADLE_HOME=/home/gradle-3.1 \
--d index.daocloud.io/library/openjdk:8-jdk /home/sleep.sh
-
-docker run --name $NGINX \
---link=$JDK:jdk \
--p 80:80 \
--p 443:443 \
--v $BASEDIR/nginx:/home \
--v $WEBDIR:/data/web \
--v $BASEDIR/conf/nginx:/etc/nginx/conf.d \
--v $BASEDIR/log/nginx:/var/log/nginx \
--w /data/web \
--e $SETXTERM \
--e $TIMEZONE \
--d daocloud.io/library/nginx
+-d daocloud.io/library/java:8-jdk /home/sleep.sh
