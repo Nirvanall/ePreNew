@@ -15,7 +15,9 @@ set -x
 add-apt-repository -y ppa:saiarcot895/myppa
 apt-get update
 apt-get -y install apt-fast
-curl -sSL https://git.daocloud.io/docker | sed 's/apt-get install/apt-fast install/g' | sh
+cd /tmp
+aria2c https://git.daocloud.io/docker
+sed 's/apt-get install/apt-fast install/g' docker | sh
 
 [ -d $BASEDIR/jdk ] || mkdir $BASEDIR/jdk -p
 echo '#!/bin/bash
@@ -26,15 +28,16 @@ done' > $BASEDIR/jdk/sleep.sh
 chmod a+x $BASEDIR/jdk/sleep.sh
 
 apt-fast install -y zip
-if [ ! -d $BASEDIR/jdk/gradle-3.1 ]; then
+if [ ! -d $BASEDIR/jdk/gradle-3.2 ]; then
 	cd $BASEDIR/jdk
-	[ -e $BASEDIR/jdk/gradle-3.1-bin.zip ] && rm -f $BASEDIR/jdk/gradle-3.1-bin.zip
-	aria2c -j5 -s5 -x5 https://services.gradle.org/distributions/gradle-3.1-bin.zip
-	unzip $BASEDIR/jdk/gradle-3.1-bin.zip
+	[ -e $BASEDIR/jdk/gradle-3.2-bin.zip ] && rm -f $BASEDIR/jdk/gradle-3.2-bin.zip
+	aria2c -j5 -s5 -x5 https://services.gradle.org/distributions/gradle-3.2-bin.zip
+	unzip $BASEDIR/jdk/gradle-3.2-bin.zip
 fi
 
 [ -d $BASEDIR/conf/redis ] || mkdir $BASEDIR/conf/redis -p
-[ -e $BASEDIR/conf/redis/redis.conf ] || curl -o $BASEDIR/conf/redis/redis.conf https://raw.githubusercontent.com/antirez/redis/3.2/redis.conf
+cd $BASEDIR/conf/redis
+[ -e $BASEDIR/conf/redis/redis.conf ] || aria2c https://raw.githubusercontent.com/antirez/redis/3.2/redis.conf
 sed -i '/^bind / s/b/# b/;/ requirepass/ a\requirepass R00T@root!' $BASEDIR/conf/redis/redis.conf
 
 docker rm -fv $JDK $MYSQL $REDIS || echo ''
@@ -73,5 +76,5 @@ docker run --name $JDK \
 -w /data/web \
 -e $SETXTERM \
 -e $TIMEZONE \
--e GRADLE_HOME=/home/gradle-3.1 \
+-e GRADLE_HOME=/home/gradle-3.2 \
 -d daocloud.io/library/java:8-jdk /home/sleep.sh

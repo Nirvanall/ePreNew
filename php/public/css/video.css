@@ -1,0 +1,47 @@
+@CHARSET "UTF-8";
+#video_player{
+	margin-right: 20px;
+}
+#comment_div{
+	height: 450px;
+	width: 300px;
+}
+#comment_div .header{
+	margin-bottom: 0.8rem;
+}
+#comment_list{
+	margin-top: 0.8rem;
+	height: 400px;
+	overflow-y: scroll;
+}
+#comment_div .item.highlighted{
+	color: black;
+}
+.comment_header{
+	font-size: 0.8em;
+}
+.comment_playtime{
+	color: #2185D0;
+	margin-right: 1em;
+}
+#comment_list p{
+	margin-bottom: 0.2em;
+}
+.comment_content{
+	word-wrap: break-word;
+}
+.comment_operation{
+	font-size: 0.8em;
+}
+
+#comment{
+	width: 50em;
+	height: 4em;
+}
+#comment_button_td{
+	text-align: center;
+	vertical-align: bottom;
+}
+#grade_td{
+	vertical-align: top;
+}

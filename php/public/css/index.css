@@ -1,0 +1,40 @@
+#row1 .segment{
+	max-width: 360px;
+	width: 360px;
+}
+table{
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: separate;
+	border-spacing: 10px;
+}
+td{
+	vertical-align: top;
+}
+
+.announcement_header,
+.announcement_header:first-child,
+.announcement_header:last-child,
+ul.ui.divided.list li:before{
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	cursor: pointer;
+}
+/*
+ * Align the point before each list item except the first item,
+ * because the margin-top of the first item overlaps with the
+ * margin-bottom of the header
+ */
+ul.ui.divided.list li:first-child:before{
+	margin-top: 0;
+}
+
+.announcement_time{
+	color: #2185d0;
+	font-size: 0.9em;
+	text-align: right;
+	margin: 0;
+}
+.announcement_content{
+	margin: 0;
+}

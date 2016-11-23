@@ -1,0 +1,26 @@
+@CHARSET "UTF-8";
+.page{
+	min-width: 800px;
+}
+.logo{
+	margin-left: 8px;
+}
+#page_header{
+	margin-top: 8px;
+}
+#page_header_logos{
+	vertical-align: bottom;
+}
+#my_user_info{
+	line-height: 1.25em;
+	font-size: 0.8em;
+	text-align: right;
+}
+#page_content{
+	min-height: 600px;
+}
+#page_footer{
+	padding-top: 20px;
+	padding-bottom: 20px;
+	text-align: center;
+}

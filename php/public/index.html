@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<base th:replace="template :: base" />
+<title>Welcome to ePre</title>
+
+<link rel="stylesheet" type="text/css" href="css/lib/semantic.min.css" />
+<link rel="stylesheet" type="text/css" href="css/page.css" />
+<link rel="stylesheet" type="text/css" href="css/index.css" />
+
+<script type="text/javascript" src="javascript/lib/jquery.js"></script>
+<script type="text/javascript" src="javascript/lib/jquery.form.js"></script>
+<script type="text/javascript" src="javascript/lib/semantic.js"></script>
+<script type="text/javascript" src="javascript/lib/vue.js"></script>
+<script type="text/javascript" src="javascript/lib/php-date-formatter.min.js"></script>
+<script type="text/javascript" src="javascript/index.js"></script>
+</head>
+
+<body>
+<article class="ui container page">
+	<section th:replace="template :: header"></section>
+	<div class="ui divider"></div>
+	
+	<section id="page_content">
+	<table>
+		<tr id="row1">
+			<td>
+				<div class="ui blue segment" id="login-segment">
+					<h3 class="ui dividing header">Login</h3>
+					<form action="login.do" method="post" class="ui form" id="login-form">
+						<div class="required field">
+							<label class="ui left aligned header">User ID</label>
+							<div class="ui left icon input">
+								<i class="user icon"></i>
+								<input type="text" name="user" required="required" maxlength="16" />
+							</div>
+						</div>
+						<div class="required field">
+							<label class="ui left aligned header">Password</label>
+							<div class="ui left icon input">
+								<i class="lock icon"></i>
+								<input type="password" name="password" required="required" maxlength="32" />
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui checkbox">
+								<input type="checkbox" name="remember" />
+								<label>Remember Me</label>
+							</div>
+						</div>
+						<div class="ui error message"></div>
+						<div>
+							<button class="ui blue submit button">Login</button>
+						</div>
+					</form>
+				</div>
+			</td>
+			<td>
+				<div class="ui blue segment">
+					<h3 class="ui dividing header">Useful Links</h3>
+					<div class="ui vertical text menu">
+						<a class="item" href="http://www.polyu.edu.hk" >PolyU Main Page</a>
+						<a class="item" href="http://www.polyu.edu.hk/feng/" >FENG Main Page</a>
+						<a class="item" href="http://eie.polyu.edu.hk" >EIE Main Page</a>
+						<a class="item" href="https://www.lib.polyu.edu.hk" >PolyU Library</a>
+						<a class="item" href="https://www38.polyu.edu.hk/eStudent/" >PolyU eStudent</a>
+						<a class="item" href="https://learn.polyu.edu.hk" >PolyU Blackboard</a>
+						<a class="item" href="https://www.outlook.com/connect.polyu.hk" >PolyU Connect</a>
+						<a class="item" href="http://www.polyu.edu.hk/sao/CDP/" >PolyU CDP</a>
+						<a class="item" href="https://www40.polyu.edu.hk/saosport/" >Sports Facilities</a>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<div id="announcement_div" class="ui blue segment">
+                    <h3 class="ui dividing header">Announcements</h3>
+					<p v-if="!hasAnnouncement">There is no announcements</p>
+					<ul class="ui divided list" v-if="hasAnnouncement">
+						<li class="item" v-for="announcement in announcements">
+							<h5 class="announcement_header" v-on:click="toggleAnnouncement">
+								<span>{{ announcement.title }}</span>
+								<i class="ui right floated down angle icon"></i>
+							</h5>
+							<div style="display: none;">
+								<p class="announcement_content">{{ announcement.content }}</p>
+								<p class="announcement_time">{{ announcement.create_time }}</p>
+							</div>
+						</li>
+					</ul>
+					<a href="announcement/table.do" v-if="hasMore">More Announcements</a>
+					<div class="ui inverted dimmer" v-bind:class="loading">
+                        <div class="ui text loader">Loading Announcements ...</div>
+                    </div>
+				</div>
+			</td>
+		</tr>
+	</table>
+	</section>
+	
+	<div th:replace="template :: footer"></div>
+</article>
+</body>
+</html>
